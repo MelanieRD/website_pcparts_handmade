@@ -129,6 +129,41 @@
   border-bottom: none;
 }
 
+/* Indicadores de stock */
+.stock-empty {
+  color: #e74c3c !important;
+  font-weight: 700;
+  background: rgba(231, 76, 60, 0.1);
+  border-radius: 8px;
+  padding: 4px 8px;
+}
+
+.stock-low {
+  color: #f39c12 !important;
+  font-weight: 600;
+  background: rgba(243, 156, 18, 0.1);
+  border-radius: 8px;
+  padding: 4px 8px;
+}
+
+/* Acciones de tabla */
+.admin-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.admin-actions .admin-btn {
+  padding: 8px 12px;
+  font-size: 0.8rem;
+  margin: 0;
+  min-width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /* Botones modernos */
 .admin-btn {
   background: linear-gradient(135deg, #667eea, #764ba2);
@@ -156,6 +191,19 @@
   transform: translateY(-1px);
 }
 
+.admin-btn:disabled {
+  background: #95a5a6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.admin-btn:disabled:hover {
+  transform: none;
+  box-shadow: none;
+  background: #95a5a6;
+}
+
 .admin-btn.delete {
   background: linear-gradient(135deg, #e74c3c, #c0392b);
   box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
@@ -164,6 +212,26 @@
 .admin-btn.delete:hover {
   box-shadow: 0 8px 25px rgba(231, 76, 60, 0.4);
   background: linear-gradient(135deg, #d63031, #a93226);
+}
+
+.admin-btn.sale {
+  background: linear-gradient(135deg, #00b894, #00a085);
+  box-shadow: 0 4px 15px rgba(0, 184, 148, 0.3);
+}
+
+.admin-btn.sale:hover {
+  box-shadow: 0 8px 25px rgba(0, 184, 148, 0.4);
+  background: linear-gradient(135deg, #00a085, #008f7a);
+}
+
+.admin-btn.sale:disabled {
+  background: #95a5a6;
+  box-shadow: none;
+}
+
+.admin-btn.sale:disabled:hover {
+  background: #95a5a6;
+  box-shadow: none;
 }
 
 .admin-btn.add {
@@ -220,6 +288,18 @@
   animation: slideIn 0.3s ease;
 }
 
+.success-message {
+  background: linear-gradient(135deg, #00b894, #00a085);
+  color: white;
+  padding: 15px 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(0, 184, 148, 0.3);
+  animation: slideIn 0.3s ease;
+}
+
 @keyframes slideIn {
   from {
     opacity: 0;
@@ -258,11 +338,19 @@
   .admin-btn {
     padding: 8px 15px;
     font-size: 0.8rem;
-    margin-bottom: 5px;
+  }
+
+  .admin-actions {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .admin-actions .admin-btn {
+    width: 100%;
+    margin: 0;
   }
 }
 
-/* Animaciones adicionales */
 .admin-content {
   animation: fadeIn 0.5s ease;
 }
@@ -278,7 +366,6 @@
   }
 }
 
-/* Estilos para datos vacíos */
 .admin-table tbody:empty::after {
   content: "No hay datos disponibles";
   display: block;
@@ -286,7 +373,98 @@
   padding: 40px;
   color: #6c757d;
   font-style: italic;
-  background: #f8f9fa;
-  border-radius: 10px;
-  margin: 20px 0;
+}
+
+/* Estilos para la sección de ventas */
+.sales-overview {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 12px;
+  padding: 30px;
+  color: white;
+  margin-bottom: 25px;
+}
+
+.sales-actions {
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.sales-actions .admin-btn {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  font-size: 1.1rem;
+  padding: 15px 30px;
+  transition: all 0.3s ease;
+}
+
+.sales-actions .admin-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+.sales-info {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.sales-info p {
+  margin-bottom: 15px;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.sales-info ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sales-info li {
+  margin: 10px 0;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 1rem;
+}
+
+.sales-info li:last-child {
+  border-bottom: none;
+}
+
+/* Mejoras en las tablas para mostrar precio base */
+.admin-table th:nth-child(4),
+.admin-table td:nth-child(4) {
+  background: rgba(102, 126, 234, 0.1);
+  font-weight: 600;
+}
+
+.admin-table th:nth-child(4) {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+}
+
+/* Responsive para la sección de ventas */
+@media (max-width: 768px) {
+  .sales-overview {
+    padding: 20px;
+  }
+
+  .sales-actions .admin-btn {
+    font-size: 1rem;
+    padding: 12px 20px;
+  }
+
+  .sales-info {
+    padding: 15px;
+  }
+
+  .sales-info p {
+    font-size: 1rem;
+  }
+
+  .sales-info li {
+    font-size: 0.9rem;
+  }
 }

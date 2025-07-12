@@ -11,14 +11,14 @@ use serde_json::Value;
 use std::env;
 use std::sync::Arc;
 use tower_http::cors::{Any, CorsLayer};
-use tracing::info;
+use tracing::{info, error};
 
 mod models;
 mod services;
 mod auth;
 
-use models::{Product, HandmadeProduct, Build, User, CreateProductRequest, CreateHandmadeProductRequest, CreateBuildRequest};
-use services::{ProductService, HandmadeService, BuildService};
+use models::{Product, HandmadeProduct, Build, User, CreateProductRequest, CreateHandmadeProductRequest, CreateBuildRequest, UpdateProductRequest, UpdateHandmadeProductRequest, Sale, CreateSaleRequest};
+use services::{ProductService, HandmadeService, BuildService, SaleService};
 use auth::{AuthService, LoginRequest, RegisterRequest, AuthResponse, auth_middleware, auth_admin_middleware, admin_middleware};
 
 struct AppState {
@@ -101,6 +101,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             .route("/builds", post(create_build))
             .route("/builds/{id}", put(update_build))
             .route("/builds/{id}", delete(delete_build))
+            .route("/sales", get(get_all_sales))
+            .route("/sales", post(create_sale))
+            .route("/sales/{id}", get(get_sale_by_id))
             .layer(axum::middleware::from_fn_with_state(state.clone(), auth_admin_middleware))
         )
         .layer(cors)
@@ -229,22 +232,38 @@ async fn seed_database(
 ) -> Result<Json<Value>, StatusCode> {
     let product_service = ProductService::new(state.db.clone());
     let handmade_service = HandmadeService::new(state.db.clone());
+    let build_service = BuildService::new(state.db.clone());
     
     match product_service.seed_products().await {
-        Ok(_) => {
-            match handmade_service.seed_handmade().await {
-                Ok(_) => Ok(Json(serde_json::json!({
-                    "message": "Database seeded successfully",
-                    "timestamp": chrono::Utc::now().to_rfc3339()
-                }))),
-                Err(_) => Err(StatusCode::INTERNAL_SERVER_ERROR),
-            }
+        Ok(_) => info!("Products seeded successfully"),
+        Err(e) => {
+            error!("Failed to seed products: {}", e);
+            return Err(StatusCode::INTERNAL_SERVER_ERROR);
         }
-        Err(_) => Err(StatusCode::INTERNAL_SERVER_ERROR),
     }
+    
+    match handmade_service.seed_handmade().await {
+        Ok(_) => info!("Handmade products seeded successfully"),
+        Err(e) => {
+            error!("Failed to seed handmade products: {}", e);
+            return Err(StatusCode::INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    match build_service.seed_builds().await {
+        Ok(_) => info!("Builds seeded successfully"),
+        Err(e) => {
+            error!("Failed to seed builds: {}", e);
+            return Err(StatusCode::INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    Ok(Json(serde_json::json!({
+        "message": "Database seeded successfully",
+        "timestamp": chrono::Utc::now().to_rfc3339()
+    })))
 }
 
-// Auth handlers
 async fn register(
     State(state): State<Arc<AppState>>,
     Json(req): Json<RegisterRequest>,
@@ -289,17 +308,6 @@ async fn get_all_products_admin(
     }
 }
 
-async fn get_all_handmade_admin(
-    State(state): State<Arc<AppState>>,
-    axum::extract::Extension(_user): axum::extract::Extension<User>,
-) -> Result<Json<Vec<HandmadeProduct>>, StatusCode> {
-    let handmade_service = HandmadeService::new(state.db.clone());
-    match handmade_service.get_all_handmade().await {
-        Ok(products) => Ok(Json(products)),
-        Err(_) => Err(StatusCode::INTERNAL_SERVER_ERROR),
-    }
-}
-
 async fn create_product(
     State(state): State<Arc<AppState>>,
     axum::extract::Extension(_user): axum::extract::Extension<User>,
@@ -307,8 +315,6 @@ async fn create_product(
 ) -> Result<Json<Value>, StatusCode> {
     let product_service = ProductService::new(state.db.clone());
     
-    // Convert CreateProductRequest to Product with generated ID
-    let now = chrono::Utc::now();
     let product = Product {
         id: uuid::Uuid::new_v4().to_string(),
         name: product_request.name,
@@ -326,13 +332,14 @@ async fn create_product(
         is_new: product_request.is_new,
         is_popular: product_request.is_popular,
         is_offer: product_request.is_offer,
-        created_at: now,
-        updated_at: now,
+        created_at: chrono::Utc::now(),
+        updated_at: chrono::Utc::now(),
     };
     
     match product_service.create_product(product).await {
         Ok(_) => Ok(Json(serde_json::json!({
-            "message": "Product created successfully"
+            "message": "Product created successfully",
+            "timestamp": chrono::Utc::now().to_rfc3339()
         }))),
         Err(_) => Err(StatusCode::INTERNAL_SERVER_ERROR),
     }
@@ -342,12 +349,43 @@ async fn update_product(
     State(state): State<Arc<AppState>>,
     axum::extract::Extension(_user): axum::extract::Extension<User>,
     axum::extract::Path(id): axum::extract::Path<String>,
-    Json(product): Json<Product>,
+    Json(product_request): Json<UpdateProductRequest>,
 ) -> Result<Json<Value>, StatusCode> {
     let product_service = ProductService::new(state.db.clone());
-    match product_service.update_product(&id, product).await {
+    
+    // Get existing product
+    let existing_product = match product_service.get_product_by_id(&id).await {
+        Ok(Some(product)) => product,
+        Ok(None) => return Err(StatusCode::NOT_FOUND),
+        Err(_) => return Err(StatusCode::INTERNAL_SERVER_ERROR),
+    };
+    
+    // Apply updates
+    let updated_product = Product {
+        id: existing_product.id,
+        name: product_request.name.unwrap_or(existing_product.name),
+        description: product_request.description.unwrap_or(existing_product.description),
+        price: product_request.price.unwrap_or(existing_product.price),
+        thumbnail_image: product_request.thumbnail_image.unwrap_or(existing_product.thumbnail_image),
+        category: product_request.category.unwrap_or(existing_product.category),
+        subcategory: product_request.subcategory.unwrap_or(existing_product.subcategory),
+        original_price: product_request.original_price.or(existing_product.original_price),
+        feature_images: product_request.feature_images.or(existing_product.feature_images),
+        specs: product_request.specs.or(existing_product.specs),
+        brand: product_request.brand.or(existing_product.brand),
+        stock: product_request.stock.or(existing_product.stock),
+        acquisition_date: product_request.acquisition_date.or(existing_product.acquisition_date),
+        is_new: product_request.is_new.or(existing_product.is_new),
+        is_popular: product_request.is_popular.or(existing_product.is_popular),
+        is_offer: product_request.is_offer.or(existing_product.is_offer),
+        created_at: existing_product.created_at,
+        updated_at: chrono::Utc::now(),
+    };
+    
+    match product_service.update_product(&id, updated_product).await {
         Ok(_) => Ok(Json(serde_json::json!({
-            "message": "Product updated successfully"
+            "message": "Product updated successfully",
+            "timestamp": chrono::Utc::now().to_rfc3339()
         }))),
         Err(_) => Err(StatusCode::INTERNAL_SERVER_ERROR),
     }
@@ -359,10 +397,23 @@ async fn delete_product(
     axum::extract::Path(id): axum::extract::Path<String>,
 ) -> Result<Json<Value>, StatusCode> {
     let product_service = ProductService::new(state.db.clone());
+    
     match product_service.delete_product(&id).await {
         Ok(_) => Ok(Json(serde_json::json!({
-            "message": "Product deleted successfully"
+            "message": "Product deleted successfully",
+            "timestamp": chrono::Utc::now().to_rfc3339()
         }))),
+        Err(_) => Err(StatusCode::INTERNAL_SERVER_ERROR),
+    }
+}
+
+async fn get_all_handmade_admin(
+    State(state): State<Arc<AppState>>,
+    axum::extract::Extension(_user): axum::extract::Extension<User>,
+) -> Result<Json<Vec<HandmadeProduct>>, StatusCode> {
+    let handmade_service = HandmadeService::new(state.db.clone());
+    match handmade_service.get_all_handmade().await {
+        Ok(products) => Ok(Json(products)),
         Err(_) => Err(StatusCode::INTERNAL_SERVER_ERROR),
     }
 }
@@ -374,8 +425,6 @@ async fn create_handmade(
 ) -> Result<Json<Value>, StatusCode> {
     let handmade_service = HandmadeService::new(state.db.clone());
     
-    // Convert CreateHandmadeProductRequest to HandmadeProduct with generated ID
-    let now = chrono::Utc::now();
     let handmade = HandmadeProduct {
         id: uuid::Uuid::new_v4().to_string(),
         name: handmade_request.name,
@@ -391,13 +440,14 @@ async fn create_handmade(
         stock: handmade_request.stock,
         acquisition_date: handmade_request.acquisition_date,
         is_offer: handmade_request.is_offer,
-        created_at: now,
-        updated_at: now,
+        created_at: chrono::Utc::now(),
+        updated_at: chrono::Utc::now(),
     };
     
     match handmade_service.create_handmade(handmade).await {
         Ok(_) => Ok(Json(serde_json::json!({
-            "message": "Handmade product created successfully"
+            "message": "Handmade product created successfully",
+            "timestamp": chrono::Utc::now().to_rfc3339()
         }))),
         Err(_) => Err(StatusCode::INTERNAL_SERVER_ERROR),
     }
@@ -407,12 +457,41 @@ async fn update_handmade(
     State(state): State<Arc<AppState>>,
     axum::extract::Extension(_user): axum::extract::Extension<User>,
     axum::extract::Path(id): axum::extract::Path<String>,
-    Json(handmade): Json<HandmadeProduct>,
+    Json(handmade_request): Json<UpdateHandmadeProductRequest>,
 ) -> Result<Json<Value>, StatusCode> {
     let handmade_service = HandmadeService::new(state.db.clone());
-    match handmade_service.update_handmade(&id, handmade).await {
+    
+    // Get existing handmade product
+    let existing_handmade = match handmade_service.get_handmade_by_id(&id).await {
+        Ok(Some(handmade)) => handmade,
+        Ok(None) => return Err(StatusCode::NOT_FOUND),
+        Err(_) => return Err(StatusCode::INTERNAL_SERVER_ERROR),
+    };
+    
+    // Apply updates
+    let updated_handmade = HandmadeProduct {
+        id: existing_handmade.id,
+        name: handmade_request.name.unwrap_or(existing_handmade.name),
+        description: handmade_request.description.unwrap_or(existing_handmade.description),
+        long_description: handmade_request.long_description.unwrap_or(existing_handmade.long_description),
+        price: handmade_request.price.unwrap_or(existing_handmade.price),
+        thumbnail_image: handmade_request.thumbnail_image.unwrap_or(existing_handmade.thumbnail_image),
+        feature_images: handmade_request.feature_images.unwrap_or(existing_handmade.feature_images),
+        category: handmade_request.category.unwrap_or(existing_handmade.category),
+        subcategory: handmade_request.subcategory.unwrap_or(existing_handmade.subcategory),
+        specs: handmade_request.specs.unwrap_or(existing_handmade.specs),
+        original_price: handmade_request.original_price.or(existing_handmade.original_price),
+        stock: handmade_request.stock.or(existing_handmade.stock),
+        acquisition_date: handmade_request.acquisition_date.or(existing_handmade.acquisition_date),
+        is_offer: handmade_request.is_offer.or(existing_handmade.is_offer),
+        created_at: existing_handmade.created_at,
+        updated_at: chrono::Utc::now(),
+    };
+    
+    match handmade_service.update_handmade(&id, updated_handmade).await {
         Ok(_) => Ok(Json(serde_json::json!({
-            "message": "Handmade product updated successfully"
+            "message": "Handmade product updated successfully",
+            "timestamp": chrono::Utc::now().to_rfc3339()
         }))),
         Err(_) => Err(StatusCode::INTERNAL_SERVER_ERROR),
     }
@@ -424,15 +503,16 @@ async fn delete_handmade(
     axum::extract::Path(id): axum::extract::Path<String>,
 ) -> Result<Json<Value>, StatusCode> {
     let handmade_service = HandmadeService::new(state.db.clone());
+    
     match handmade_service.delete_handmade(&id).await {
         Ok(_) => Ok(Json(serde_json::json!({
-            "message": "Handmade product deleted successfully"
+            "message": "Handmade product deleted successfully",
+            "timestamp": chrono::Utc::now().to_rfc3339()
         }))),
         Err(_) => Err(StatusCode::INTERNAL_SERVER_ERROR),
     }
 }
 
-// Admin build handlers
 async fn get_all_builds_admin(
     State(state): State<Arc<AppState>>,
     axum::extract::Extension(_user): axum::extract::Extension<User>,
@@ -451,8 +531,6 @@ async fn create_build(
 ) -> Result<Json<Value>, StatusCode> {
     let build_service = BuildService::new(state.db.clone());
     
-    // Convert CreateBuildRequest to Build with generated ID
-    let now = chrono::Utc::now();
     let build = Build {
         id: uuid::Uuid::new_v4().to_string(),
         name: build_request.name,
@@ -469,13 +547,14 @@ async fn create_build(
         stock: build_request.stock,
         acquisition_date: build_request.acquisition_date,
         is_offer: build_request.is_offer,
-        created_at: now,
-        updated_at: now,
+        created_at: chrono::Utc::now(),
+        updated_at: chrono::Utc::now(),
     };
     
     match build_service.create_build(build).await {
         Ok(_) => Ok(Json(serde_json::json!({
-            "message": "Build created successfully"
+            "message": "Build created successfully",
+            "timestamp": chrono::Utc::now().to_rfc3339()
         }))),
         Err(_) => Err(StatusCode::INTERNAL_SERVER_ERROR),
     }
@@ -485,12 +564,42 @@ async fn update_build(
     State(state): State<Arc<AppState>>,
     axum::extract::Extension(_user): axum::extract::Extension<User>,
     axum::extract::Path(id): axum::extract::Path<String>,
-    Json(build): Json<Build>,
+    Json(build_request): Json<CreateBuildRequest>,
 ) -> Result<Json<Value>, StatusCode> {
     let build_service = BuildService::new(state.db.clone());
-    match build_service.update_build(&id, build).await {
+    
+    // Get existing build
+    let existing_build = match build_service.get_build_by_id(&id).await {
+        Ok(Some(build)) => build,
+        Ok(None) => return Err(StatusCode::NOT_FOUND),
+        Err(_) => return Err(StatusCode::INTERNAL_SERVER_ERROR),
+    };
+    
+    // Apply updates
+    let updated_build = Build {
+        id: existing_build.id,
+        name: build_request.name,
+        description: build_request.description,
+        long_description: build_request.long_description,
+        price: build_request.price,
+        thumbnail_image: build_request.thumbnail_image,
+        feature_images: build_request.feature_images,
+        category: build_request.category,
+        subcategory: build_request.subcategory,
+        specs: build_request.specs,
+        components: build_request.components,
+        original_price: build_request.original_price,
+        stock: build_request.stock,
+        acquisition_date: build_request.acquisition_date,
+        is_offer: build_request.is_offer,
+        created_at: existing_build.created_at,
+        updated_at: chrono::Utc::now(),
+    };
+    
+    match build_service.update_build(&id, updated_build).await {
         Ok(_) => Ok(Json(serde_json::json!({
-            "message": "Build updated successfully"
+            "message": "Build updated successfully",
+            "timestamp": chrono::Utc::now().to_rfc3339()
         }))),
         Err(_) => Err(StatusCode::INTERNAL_SERVER_ERROR),
     }
@@ -502,10 +611,49 @@ async fn delete_build(
     axum::extract::Path(id): axum::extract::Path<String>,
 ) -> Result<Json<Value>, StatusCode> {
     let build_service = BuildService::new(state.db.clone());
+    
     match build_service.delete_build(&id).await {
         Ok(_) => Ok(Json(serde_json::json!({
-            "message": "Build deleted successfully"
+            "message": "Build deleted successfully",
+            "timestamp": chrono::Utc::now().to_rfc3339()
         }))),
+        Err(_) => Err(StatusCode::INTERNAL_SERVER_ERROR),
+    }
+}
+
+// Sales handlers
+async fn get_all_sales(
+    State(state): State<Arc<AppState>>,
+    axum::extract::Extension(_user): axum::extract::Extension<User>,
+) -> Result<Json<Vec<Sale>>, StatusCode> {
+    let sale_service = SaleService::new(state.db.clone());
+    match sale_service.get_all_sales().await {
+        Ok(sales) => Ok(Json(sales)),
+        Err(_) => Err(StatusCode::INTERNAL_SERVER_ERROR),
+    }
+}
+
+async fn create_sale(
+    State(state): State<Arc<AppState>>,
+    axum::extract::Extension(_user): axum::extract::Extension<User>,
+    Json(sale_request): Json<CreateSaleRequest>,
+) -> Result<Json<Sale>, StatusCode> {
+    let sale_service = SaleService::new(state.db.clone());
+    
+    match sale_service.create_sale(sale_request).await {
+        Ok(sale) => Ok(Json(sale)),
+        Err(_) => Err(StatusCode::INTERNAL_SERVER_ERROR),
+    }
+}
+
+async fn get_sale_by_id(
+    State(state): State<Arc<AppState>>,
+    axum::extract::Extension(_user): axum::extract::Extension<User>,
+    axum::extract::Path(id): axum::extract::Path<String>,
+) -> Result<Json<Option<Sale>>, StatusCode> {
+    let sale_service = SaleService::new(state.db.clone());
+    match sale_service.get_sale_by_id(&id).await {
+        Ok(sale) => Ok(Json(sale)),
         Err(_) => Err(StatusCode::INTERNAL_SERVER_ERROR),
     }
 } 

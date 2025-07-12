@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import type { Product } from "../services/api";
+import ImageGalleryManager from "./ImageGalleryManager";
+import SpecificationsManager from "./SpecificationsManager";
 import "./FormStyles.css";
 
 interface ProductFormProps {
@@ -96,6 +98,9 @@ const ProductForm: React.FC<ProductFormProps> = ({ product, isOpen, onClose, onS
       <div className="form-container">
         <div className="form-header">
           <h2 className="form-title">{mode === "add" ? "➕ Agregar Producto" : "✏️ Editar Producto"}</h2>
+          <button className="form-close-btn" onClick={onClose}>
+            ✕
+          </button>
         </div>
 
         <div className="form-body">
@@ -209,43 +214,10 @@ const ProductForm: React.FC<ProductFormProps> = ({ product, isOpen, onClose, onS
                   </div>
                 )}
               </div>
-              <div className="form-group">
-                <label className="form-label">Galería de Imágenes</label>
-                <input
-                  className="form-input"
-                  type="url"
-                  value={formData.featureImages[0] || ""}
-                  onChange={(e) => setFormData({ ...formData, featureImages: [e.target.value] })}
-                  placeholder="https://example.com/image1.jpg"
-                />
-                <input
-                  className="form-input"
-                  type="url"
-                  value={formData.featureImages[1] || ""}
-                  onChange={(e) => setFormData({ ...formData, featureImages: [formData.featureImages[0] || "", e.target.value] })}
-                  placeholder="https://example.com/image2.jpg"
-                />
-                <input
-                  className="form-input"
-                  type="url"
-                  value={formData.featureImages[2] || ""}
-                  onChange={(e) => setFormData({ ...formData, featureImages: [formData.featureImages[0] || "", formData.featureImages[1] || "", e.target.value] })}
-                  placeholder="https://example.com/image3.jpg"
-                />
-                {formData.featureImages.length > 0 && (
-                  <div className="form-image-preview">
-                    {formData.featureImages.map(
-                      (img, index) =>
-                        img && (
-                          <div key={index} className="form-image-item">
-                            <img src={img} alt={`Feature ${index + 1}`} />
-                          </div>
-                        )
-                    )}
-                  </div>
-                )}
-              </div>
             </div>
+
+            {/* Nuevo componente para gestión de galería de imágenes */}
+            <ImageGalleryManager images={formData.featureImages} onChange={(images) => setFormData({ ...formData, featureImages: images })} title="Galería de Imágenes del Producto" />
 
             <div className="form-row">
               <div className="form-group">
@@ -262,21 +234,8 @@ const ProductForm: React.FC<ProductFormProps> = ({ product, isOpen, onClose, onS
               </div>
             </div>
 
-            <div className="form-group">
-              <label className="form-label">Especificaciones (JSON)</label>
-              <textarea
-                className="form-input form-textarea"
-                value={JSON.stringify(formData.specs, null, 2)}
-                onChange={(e) => {
-                  try {
-                    setFormData({ ...formData, specs: JSON.parse(e.target.value) });
-                  } catch (err) {
-                    // Ignore JSON parse errors while typing
-                  }
-                }}
-                placeholder='{"color": "Rojo", "capacidad": "1TB", "procesador": "Intel Core i7"}'
-              />
-            </div>
+            {/* Nuevo componente para gestión de especificaciones */}
+            <SpecificationsManager specs={formData.specs} onChange={(specs) => setFormData({ ...formData, specs })} title="Especificaciones del Producto" />
 
             <div className="form-row">
               <div className="form-group">

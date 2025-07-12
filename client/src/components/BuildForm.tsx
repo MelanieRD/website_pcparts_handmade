@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from "react";
-import type { HandmadeProduct } from "../services/api";
+import type { Build, BuildComponent } from "../services/api";
 import ImageGalleryManager from "./ImageGalleryManager";
 import SpecificationsManager from "./SpecificationsManager";
 import "./FormStyles.css";
 
-interface HandmadeFormProps {
-  handmade?: HandmadeProduct | null;
+interface BuildFormProps {
+  build?: Build | null;
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (handmade: Omit<HandmadeProduct, "id">) => Promise<void>;
+  onSubmit: (build: Omit<Build, "id">) => Promise<void>;
   mode: "add" | "edit";
 }
 
-const HandmadeForm: React.FC<HandmadeFormProps> = ({ handmade, isOpen, onClose, onSubmit, mode }) => {
+const BuildForm: React.FC<BuildFormProps> = ({ build, isOpen, onClose, onSubmit, mode }) => {
   const [formData, setFormData] = useState({
     name: { es: "", en: "", fr: "" },
     description: { es: "", en: "", fr: "" },
@@ -26,39 +26,46 @@ const HandmadeForm: React.FC<HandmadeFormProps> = ({ handmade, isOpen, onClose, 
     category: "",
     subcategory: "",
     specs: {} as Record<string, string>,
+    components: [] as BuildComponent[],
     isOffer: false,
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [newComponent, setNewComponent] = useState({
+    productId: "",
+    quantity: 1,
+    notes: "",
+  });
 
   useEffect(() => {
-    if (handmade && mode === "edit") {
+    if (build && mode === "edit") {
       setFormData({
         name: {
-          es: handmade.name.es || "",
-          en: handmade.name.en || "",
-          fr: handmade.name.fr || "",
+          es: build.name.es || "",
+          en: build.name.en || "",
+          fr: build.name.fr || "",
         },
         description: {
-          es: handmade.description.es || "",
-          en: handmade.description.en || "",
-          fr: handmade.description.fr || "",
+          es: build.description.es || "",
+          en: build.description.en || "",
+          fr: build.description.fr || "",
         },
         longDescription: {
-          es: handmade.longDescription.es || "",
-          en: handmade.longDescription.en || "",
-          fr: handmade.longDescription.fr || "",
+          es: build.longDescription.es || "",
+          en: build.longDescription.en || "",
+          fr: build.longDescription.fr || "",
         },
-        price: handmade.price,
-        originalPrice: handmade.originalPrice || "",
-        stock: handmade.stock || 0,
-        acquisitionDate: handmade.acquisitionDate || "",
-        thumbnailImage: handmade.thumbnailImage || "",
-        featureImages: handmade.featureImages || [],
-        category: handmade.category,
-        subcategory: handmade.subcategory,
-        specs: handmade.specs || {},
-        isOffer: handmade.isOffer || false,
+        price: build.price,
+        originalPrice: build.originalPrice || "",
+        stock: build.stock || 0,
+        acquisitionDate: build.acquisitionDate || "",
+        thumbnailImage: build.thumbnailImage || "",
+        featureImages: build.featureImages || [],
+        category: build.category,
+        subcategory: build.subcategory,
+        specs: build.specs || {},
+        components: build.components || [],
+        isOffer: build.isOffer || false,
       });
     } else {
       setFormData({
@@ -74,10 +81,11 @@ const HandmadeForm: React.FC<HandmadeFormProps> = ({ handmade, isOpen, onClose, 
         category: "",
         subcategory: "",
         specs: {},
+        components: [],
         isOffer: false,
       });
     }
-  }, [handmade, mode, isOpen]);
+  }, [build, mode, isOpen]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -88,10 +96,33 @@ const HandmadeForm: React.FC<HandmadeFormProps> = ({ handmade, isOpen, onClose, 
       await onSubmit(formData);
       onClose();
     } catch (err) {
-      setError("Error al guardar el producto handmade. Inténtalo de nuevo.");
+      setError("Error al guardar el build. Inténtalo de nuevo.");
     } finally {
       setLoading(false);
     }
+  };
+
+  const addComponent = () => {
+    if (newComponent.productId.trim()) {
+      setFormData({
+        ...formData,
+        components: [...formData.components, { ...newComponent }],
+      });
+      setNewComponent({ productId: "", quantity: 1, notes: "" });
+    }
+  };
+
+  const removeComponent = (index: number) => {
+    setFormData({
+      ...formData,
+      components: formData.components.filter((_, i) => i !== index),
+    });
+  };
+
+  const updateComponent = (index: number, field: keyof BuildComponent, value: any) => {
+    const updatedComponents = [...formData.components];
+    updatedComponents[index] = { ...updatedComponents[index], [field]: value };
+    setFormData({ ...formData, components: updatedComponents });
   };
 
   if (!isOpen) return null;
@@ -100,7 +131,7 @@ const HandmadeForm: React.FC<HandmadeFormProps> = ({ handmade, isOpen, onClose, 
     <div className="form-modal-bg">
       <div className="form-container">
         <div className="form-header">
-          <h2 className="form-title">{mode === "add" ? "🎨 Agregar Producto Handmade" : "✏️ Editar Producto Handmade"}</h2>
+          <h2 className="form-title">{mode === "add" ? "🔧 Agregar Build" : "✏️ Editar Build"}</h2>
           <button className="form-close-btn" onClick={onClose}>
             ✕
           </button>
@@ -120,7 +151,7 @@ const HandmadeForm: React.FC<HandmadeFormProps> = ({ handmade, isOpen, onClose, 
                   value={formData.name.es}
                   onChange={(e) => setFormData({ ...formData, name: { ...formData.name, es: e.target.value } })}
                   required
-                  placeholder="Ej: Collar de Plata Artesanal"
+                  placeholder="Ej: PC Gaming Pro"
                 />
               </div>
               <div className="form-group">
@@ -131,7 +162,7 @@ const HandmadeForm: React.FC<HandmadeFormProps> = ({ handmade, isOpen, onClose, 
                   value={formData.name.en}
                   onChange={(e) => setFormData({ ...formData, name: { ...formData.name, en: e.target.value } })}
                   required
-                  placeholder="Ex: Handcrafted Silver Necklace"
+                  placeholder="Ex: Pro Gaming PC"
                 />
               </div>
               <div className="form-group">
@@ -142,7 +173,7 @@ const HandmadeForm: React.FC<HandmadeFormProps> = ({ handmade, isOpen, onClose, 
                   value={formData.name.fr}
                   onChange={(e) => setFormData({ ...formData, name: { ...formData.name, fr: e.target.value } })}
                   required
-                  placeholder="Ex: Collier en Argent Artisanal"
+                  placeholder="Ex: PC Gaming Pro"
                 />
               </div>
             </div>
@@ -156,7 +187,7 @@ const HandmadeForm: React.FC<HandmadeFormProps> = ({ handmade, isOpen, onClose, 
                   value={formData.description.es}
                   onChange={(e) => setFormData({ ...formData, description: { ...formData.description, es: e.target.value } })}
                   required
-                  placeholder="Descripción breve del producto"
+                  placeholder="Descripción breve del build"
                 />
               </div>
               <div className="form-group">
@@ -166,7 +197,7 @@ const HandmadeForm: React.FC<HandmadeFormProps> = ({ handmade, isOpen, onClose, 
                   value={formData.description.en}
                   onChange={(e) => setFormData({ ...formData, description: { ...formData.description, en: e.target.value } })}
                   required
-                  placeholder="Short product description"
+                  placeholder="Short build description"
                 />
               </div>
               <div className="form-group">
@@ -176,7 +207,7 @@ const HandmadeForm: React.FC<HandmadeFormProps> = ({ handmade, isOpen, onClose, 
                   value={formData.description.fr}
                   onChange={(e) => setFormData({ ...formData, description: { ...formData.description, fr: e.target.value } })}
                   required
-                  placeholder="Description courte du produit"
+                  placeholder="Description courte du build"
                 />
               </div>
             </div>
@@ -190,7 +221,7 @@ const HandmadeForm: React.FC<HandmadeFormProps> = ({ handmade, isOpen, onClose, 
                   value={formData.longDescription.es}
                   onChange={(e) => setFormData({ ...formData, longDescription: { ...formData.longDescription, es: e.target.value } })}
                   required
-                  placeholder="Descripción detallada del proceso artesanal"
+                  placeholder="Descripción detallada del build y sus componentes"
                   rows={4}
                 />
               </div>
@@ -201,7 +232,7 @@ const HandmadeForm: React.FC<HandmadeFormProps> = ({ handmade, isOpen, onClose, 
                   value={formData.longDescription.en}
                   onChange={(e) => setFormData({ ...formData, longDescription: { ...formData.longDescription, en: e.target.value } })}
                   required
-                  placeholder="Detailed description of the crafting process"
+                  placeholder="Detailed description of the build and its components"
                   rows={4}
                 />
               </div>
@@ -212,7 +243,7 @@ const HandmadeForm: React.FC<HandmadeFormProps> = ({ handmade, isOpen, onClose, 
                   value={formData.longDescription.fr}
                   onChange={(e) => setFormData({ ...formData, longDescription: { ...formData.longDescription, fr: e.target.value } })}
                   required
-                  placeholder="Description détaillée du processus artisanal"
+                  placeholder="Description détaillée du build et de ses composants"
                   rows={4}
                 />
               </div>
@@ -222,18 +253,18 @@ const HandmadeForm: React.FC<HandmadeFormProps> = ({ handmade, isOpen, onClose, 
             <div className="form-row">
               <div className="form-group">
                 <label className="form-label">Precio de Venta *</label>
-                <input className="form-input" type="text" value={formData.price} onChange={(e) => setFormData({ ...formData, price: e.target.value })} required placeholder="99.99" />
+                <input className="form-input" type="text" value={formData.price} onChange={(e) => setFormData({ ...formData, price: e.target.value })} required placeholder="1299.99" />
               </div>
               <div className="form-group">
                 <label className="form-label">Precio Base</label>
-                <input className="form-input" type="text" value={formData.originalPrice} onChange={(e) => setFormData({ ...formData, originalPrice: e.target.value })} placeholder="129.99" />
+                <input className="form-input" type="text" value={formData.originalPrice} onChange={(e) => setFormData({ ...formData, originalPrice: e.target.value })} placeholder="1499.99" />
               </div>
               <div className="form-group">
                 <label className="form-label">Cantidad en Stock *</label>
-                <input className="form-input" type="number" min="0" value={formData.stock} onChange={(e) => setFormData({ ...formData, stock: Number(e.target.value) })} required placeholder="5" />
+                <input className="form-input" type="number" min="0" value={formData.stock} onChange={(e) => setFormData({ ...formData, stock: Number(e.target.value) })} required placeholder="3" />
               </div>
               <div className="form-group">
-                <label className="form-label">Fecha de Creación</label>
+                <label className="form-label">Fecha de Ensamblaje</label>
                 <input className="form-input" type="date" value={formData.acquisitionDate} onChange={(e) => setFormData({ ...formData, acquisitionDate: e.target.value })} />
               </div>
             </div>
@@ -260,30 +291,75 @@ const HandmadeForm: React.FC<HandmadeFormProps> = ({ handmade, isOpen, onClose, 
               </div>
             </div>
 
-            {/* Nuevo componente para gestión de galería de imágenes */}
-            <ImageGalleryManager images={formData.featureImages} onChange={(images) => setFormData({ ...formData, featureImages: images })} title="Galería de Imágenes del Producto Handmade" />
+            {/* Galería de imágenes */}
+            <ImageGalleryManager images={formData.featureImages} onChange={(images) => setFormData({ ...formData, featureImages: images })} title="Galería de Imágenes del Build" />
 
             {/* Categorías */}
             <div className="form-row">
               <div className="form-group">
                 <label className="form-label">Categoría *</label>
-                <input className="form-input" type="text" value={formData.category} onChange={(e) => setFormData({ ...formData, category: e.target.value })} required placeholder="Ej: joyeria" />
+                <input className="form-input" type="text" value={formData.category} onChange={(e) => setFormData({ ...formData, category: e.target.value })} required placeholder="Ej: builds" />
               </div>
               <div className="form-group">
                 <label className="form-label">Subcategoría *</label>
-                <input
-                  className="form-input"
-                  type="text"
-                  value={formData.subcategory}
-                  onChange={(e) => setFormData({ ...formData, subcategory: e.target.value })}
-                  required
-                  placeholder="Ej: collares"
-                />
+                <input className="form-input" type="text" value={formData.subcategory} onChange={(e) => setFormData({ ...formData, subcategory: e.target.value })} required placeholder="Ej: gaming" />
               </div>
             </div>
 
-            {/* Nuevo componente para gestión de especificaciones */}
-            <SpecificationsManager specs={formData.specs} onChange={(specs) => setFormData({ ...formData, specs })} title="Especificaciones del Producto Handmade" />
+            {/* Componentes del Build */}
+            <div className="form-group">
+              <label className="form-label">Componentes del Build</label>
+
+              {/* Agregar nuevo componente */}
+              <div className="component-input-container">
+                <input
+                  className="form-input"
+                  type="text"
+                  value={newComponent.productId}
+                  onChange={(e) => setNewComponent({ ...newComponent, productId: e.target.value })}
+                  placeholder="ID del producto"
+                />
+                <input
+                  className="form-input"
+                  type="number"
+                  min="1"
+                  value={newComponent.quantity}
+                  onChange={(e) => setNewComponent({ ...newComponent, quantity: Number(e.target.value) })}
+                  placeholder="Cantidad"
+                />
+                <input className="form-input" type="text" value={newComponent.notes} onChange={(e) => setNewComponent({ ...newComponent, notes: e.target.value })} placeholder="Notas (opcional)" />
+                <button type="button" className="form-btn form-btn-small" onClick={addComponent} disabled={!newComponent.productId.trim()}>
+                  ➕ Agregar
+                </button>
+              </div>
+
+              {/* Lista de componentes */}
+              {formData.components.length > 0 && (
+                <div className="components-list">
+                  {formData.components.map((component, index) => (
+                    <div key={index} className="component-item">
+                      <div className="component-info">
+                        <span className="component-id">ID: {component.productId}</span>
+                        <span className="component-quantity">Cantidad: {component.quantity}</span>
+                        {component.notes && <span className="component-notes">Notas: {component.notes}</span>}
+                      </div>
+                      <button type="button" className="form-btn form-btn-small" onClick={() => removeComponent(index)} title="Eliminar componente">
+                        🗑️
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {formData.components.length === 0 && (
+                <div className="components-empty">
+                  <p>No hay componentes agregados. Agrega componentes usando los campos de arriba.</p>
+                </div>
+              )}
+            </div>
+
+            {/* Especificaciones */}
+            <SpecificationsManager specs={formData.specs} onChange={(specs) => setFormData({ ...formData, specs })} title="Especificaciones del Build" />
 
             {/* Opciones */}
             <div className="form-row">
@@ -302,7 +378,7 @@ const HandmadeForm: React.FC<HandmadeFormProps> = ({ handmade, isOpen, onClose, 
             ❌ Cancelar
           </button>
           <button className="form-btn" type="button" onClick={handleSubmit} disabled={loading}>
-            {loading ? "⏳ Guardando..." : mode === "add" ? "✅ Agregar Handmade" : "💾 Guardar Cambios"}
+            {loading ? "⏳ Guardando..." : mode === "add" ? "✅ Agregar Build" : "💾 Guardar Cambios"}
           </button>
         </div>
       </div>
@@ -310,4 +386,4 @@ const HandmadeForm: React.FC<HandmadeFormProps> = ({ handmade, isOpen, onClose, 
   );
 };
 
-export default HandmadeForm;
+export default BuildForm;

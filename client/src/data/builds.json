@@ -1,0 +1,157 @@
+[
+  {
+    "id": "build1",
+    "name": {
+      "es": "Build Gaming Pro RTX 4070",
+      "en": "RTX 4070 Gaming Pro Build",
+      "fr": "Build Gaming Pro RTX 4070"
+    },
+    "description": {
+      "es": "Build gaming de alto rendimiento con RTX 4070 y procesador Intel i7-13700K.",
+      "en": "High-performance gaming build with RTX 4070 and Intel i7-13700K processor.",
+      "fr": "Build gaming haute performance avec RTX 4070 et processeur Intel i7-13700K."
+    },
+    "long_description": {
+      "es": "Esta build gaming está optimizada para ofrecer el máximo rendimiento en juegos AAA. El procesador Intel i7-13700K con 16 núcleos y 24 hilos proporciona la potencia necesaria para gaming y streaming simultáneo. La tarjeta gráfica RTX 4070 con 12GB GDDR6X y ray tracing garantiza gráficos excepcionales. El sistema de refrigeración líquida mantiene temperaturas óptimas, mientras que la memoria DDR5 de alta velocidad asegura tiempos de respuesta mínimos. Incluye SSD NVMe de 1TB para tiempos de carga ultrarrápidos y fuente de poder modular 750W 80 Plus Gold para máxima eficiencia.",
+      "en": "This gaming build is optimized to deliver maximum performance in AAA games. The Intel i7-13700K processor with 16 cores and 24 threads provides the power needed for gaming and simultaneous streaming. The RTX 4070 graphics card with 12GB GDDR6X and ray tracing guarantees exceptional graphics. The liquid cooling system maintains optimal temperatures, while high-speed DDR5 memory ensures minimal response times. Includes 1TB NVMe SSD for ultra-fast loading times and modular 750W 80 Plus Gold power supply for maximum efficiency.",
+      "fr": "Ce build gaming est optimisé pour offrir des performances maximales dans les jeux AAA. Le processeur Intel i7-13700K avec 16 cœurs et 24 threads fournit la puissance nécessaire pour le gaming et le streaming simultané. La carte graphique RTX 4070 avec 12GB GDDR6X et ray tracing garantit des graphiques exceptionnels. Le système de refroidissement liquide maintient des températures optimales, tandis que la mémoire DDR5 haute vitesse assure des temps de réponse minimaux. Inclut un SSD NVMe de 1TB pour des temps de chargement ultra-rapides et une alimentation modulaire 750W 80 Plus Gold pour une efficacité maximale."
+    },
+    "price": "1899.99",
+    "original_price": "2199.99",
+    "thumbnail_image": "/assets/builds/gaming-pro-rtx4070.jpg",
+    "feature_images": ["/assets/builds/gaming-pro-rtx4070.jpg", "/assets/builds/gaming-pro-rtx4070-2.jpg", "/assets/builds/gaming-pro-rtx4070-3.jpg"],
+    "category": "gaming",
+    "subcategory": "high-end",
+    "specs": {
+      "Procesador": "Intel Core i7-13700K",
+      "Tarjeta Gráfica": "NVIDIA RTX 4070 12GB",
+      "RAM": "32GB DDR5-6000MHz",
+      "Almacenamiento": "1TB NVMe SSD",
+      "Refrigeración": "Líquida 240mm RGB",
+      "Fuente": "750W 80 Plus Gold Modular"
+    },
+    "components": [
+      {
+        "product_id": "4",
+        "quantity": 1,
+        "notes": "Procesador principal"
+      },
+      {
+        "product_id": "6",
+        "quantity": 1,
+        "notes": "Tarjeta gráfica gaming"
+      },
+      {
+        "product_id": "8",
+        "quantity": 1,
+        "notes": "Placa base compatible"
+      },
+      {
+        "product_id": "10",
+        "quantity": 1,
+        "notes": "Almacenamiento principal"
+      }
+    ],
+    "stock": 3,
+    "acquisition_date": "2024-01-15T00:00:00Z",
+    "is_offer": true,
+    "created_at": "2024-01-15T00:00:00Z",
+    "updated_at": "2024-01-15T00:00:00Z"
+  },
+  {
+    "id": "build2",
+    "name": {
+      "es": "Build Workstation AMD Ryzen 9",
+      "en": "AMD Ryzen 9 Workstation Build",
+      "fr": "Build Workstation AMD Ryzen 9"
+    },
+    "description": {
+      "es": "Estación de trabajo profesional con AMD Ryzen 9 7900X y RTX 4080.",
+      "en": "Professional workstation with AMD Ryzen 9 7900X and RTX 4080.",
+      "fr": "Station de travail professionnelle avec AMD Ryzen 9 7900X et RTX 4080."
+    },
+    "long_description": {
+      "es": "Build de estación de trabajo diseñada para profesionales que requieren máximo rendimiento en renderizado 3D, edición de video y desarrollo de software. El procesador AMD Ryzen 9 7900X con 12 núcleos y arquitectura Zen 4 ofrece un rendimiento excepcional en aplicaciones multihilo. La tarjeta gráfica RTX 4080 con 16GB GDDR6X es perfecta para renderizado GPU y machine learning. Incluye 64GB de RAM DDR5 para manejar proyectos complejos y múltiples SSD NVMe para almacenamiento de alta velocidad. El sistema de refrigeración avanzado y la fuente de poder de 850W garantizan estabilidad en cargas de trabajo intensivas.",
+      "en": "Workstation build designed for professionals who require maximum performance in 3D rendering, video editing, and software development. The AMD Ryzen 9 7900X processor with 12 cores and Zen 4 architecture offers exceptional performance in multi-threaded applications. The RTX 4080 graphics card with 16GB GDDR6X is perfect for GPU rendering and machine learning. Includes 64GB DDR5 RAM to handle complex projects and multiple NVMe SSDs for high-speed storage. The advanced cooling system and 850W power supply ensure stability under intensive workloads.",
+      "fr": "Build de station de travail conçu pour les professionnels qui nécessitent des performances maximales en rendu 3D, montage vidéo et développement logiciel. Le processeur AMD Ryzen 9 7900X avec 12 cœurs et architecture Zen 4 offre des performances exceptionnelles dans les applications multi-thread. La carte graphique RTX 4080 avec 16GB GDDR6X est parfaite pour le rendu GPU et l'apprentissage automatique. Inclut 64GB de RAM DDR5 pour gérer des projets complexes et plusieurs SSD NVMe pour un stockage haute vitesse. Le système de refroidissement avancé et l'alimentation de 850W garantissent la stabilité sous des charges de travail intensives."
+    },
+    "price": "2899.99",
+    "thumbnail_image": "/assets/builds/workstation-ryzen9.jpg",
+    "feature_images": ["/assets/builds/workstation-ryzen9.jpg", "/assets/builds/workstation-ryzen9-2.jpg"],
+    "category": "workstation",
+    "subcategory": "professional",
+    "specs": {
+      "Procesador": "AMD Ryzen 9 7900X",
+      "Tarjeta Gráfica": "NVIDIA RTX 4080 16GB",
+      "RAM": "64GB DDR5-6000MHz",
+      "Almacenamiento": "2TB NVMe SSD + 4TB HDD",
+      "Refrigeración": "Líquida 360mm",
+      "Fuente": "850W 80 Plus Platinum"
+    },
+    "components": [
+      {
+        "product_id": "5",
+        "quantity": 1,
+        "notes": "Procesador workstation"
+      },
+      {
+        "product_id": "9",
+        "quantity": 1,
+        "notes": "Placa base AMD"
+      },
+      {
+        "product_id": "10",
+        "quantity": 2,
+        "notes": "Almacenamiento principal"
+      }
+    ],
+    "stock": 2,
+    "acquisition_date": "2024-01-10T00:00:00Z",
+    "is_offer": false,
+    "created_at": "2024-01-10T00:00:00Z",
+    "updated_at": "2024-01-10T00:00:00Z"
+  },
+  {
+    "id": "build3",
+    "name": {
+      "es": "Build Compact Mini ITX",
+      "en": "Compact Mini ITX Build",
+      "fr": "Build Compact Mini ITX"
+    },
+    "description": {
+      "es": "Build compacta Mini ITX perfecta para espacios reducidos sin sacrificar rendimiento.",
+      "en": "Compact Mini ITX build perfect for small spaces without sacrificing performance.",
+      "fr": "Build compact Mini ITX parfait pour les petits espaces sans sacrifier les performances."
+    },
+    "long_description": {
+      "es": "Build compacta diseñada para usuarios que necesitan un PC potente en un espacio reducido. Utiliza componentes Mini ITX cuidadosamente seleccionados para maximizar el rendimiento en un factor de forma pequeño. El procesador Intel i5-13600K ofrece excelente rendimiento gaming, mientras que la tarjeta gráfica RTX 4060 Ti proporciona gráficos de calidad en 1440p. El sistema de refrigeración especializado mantiene temperaturas óptimas en el espacio reducido. Incluye SSD NVMe de 1TB para almacenamiento rápido y memoria DDR5 de 32GB para multitarea fluida. Perfecta para gaming, trabajo y streaming en setups minimalistas.",
+      "en": "Compact build designed for users who need a powerful PC in a small space. Uses carefully selected Mini ITX components to maximize performance in a small form factor. The Intel i5-13600K processor offers excellent gaming performance, while the RTX 4060 Ti graphics card provides quality graphics at 1440p. The specialized cooling system maintains optimal temperatures in the confined space. Includes 1TB NVMe SSD for fast storage and 32GB DDR5 memory for smooth multitasking. Perfect for gaming, work, and streaming in minimalist setups.",
+      "fr": "Build compact conçu pour les utilisateurs qui ont besoin d'un PC puissant dans un petit espace. Utilise des composants Mini ITX soigneusement sélectionnés pour maximiser les performances dans un petit facteur de forme. Le processeur Intel i5-13600K offre d'excellentes performances de jeu, tandis que la carte graphique RTX 4060 Ti fournit des graphiques de qualité en 1440p. Le système de refroidissement spécialisé maintient des températures optimales dans l'espace confiné. Inclut un SSD NVMe de 1TB pour un stockage rapide et 32GB de mémoire DDR5 pour un multitâche fluide. Parfait pour le gaming, le travail et le streaming dans des setups minimalistes."
+    },
+    "price": "1299.99",
+    "thumbnail_image": "/assets/builds/mini-itx-compact.jpg",
+    "feature_images": ["/assets/builds/mini-itx-compact.jpg", "/assets/builds/mini-itx-compact-2.jpg"],
+    "category": "compact",
+    "subcategory": "mini-itx",
+    "specs": {
+      "Procesador": "Intel Core i5-13600K",
+      "Tarjeta Gráfica": "NVIDIA RTX 4060 Ti 8GB",
+      "RAM": "32GB DDR5-5600MHz",
+      "Almacenamiento": "1TB NVMe SSD",
+      "Refrigeración": "Aire de bajo perfil",
+      "Fuente": "650W 80 Plus Gold SFX"
+    },
+    "components": [
+      {
+        "product_id": "10",
+        "quantity": 1,
+        "notes": "Almacenamiento principal"
+      }
+    ],
+    "stock": 5,
+    "acquisition_date": "2024-01-12T00:00:00Z",
+    "is_offer": false,
+    "created_at": "2024-01-12T00:00:00Z",
+    "updated_at": "2024-01-12T00:00:00Z"
+  }
+]

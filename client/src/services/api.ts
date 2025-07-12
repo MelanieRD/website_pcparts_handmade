@@ -67,6 +67,38 @@ export interface Build {
   updatedAt?: string;
 }
 
+// Nueva interfaz para ventas
+export interface Sale {
+  id: string;
+  productId: string;
+  productType: "product" | "handmade" | "build";
+  productName: string;
+  quantity: number;
+  unitPrice: string;
+  totalPrice: string;
+  discount?: string;
+  finalPrice: string;
+  customerName: string;
+  customerEmail?: string;
+  customerPhone?: string;
+  paymentMethod: string;
+  notes?: string;
+  saleDate: string;
+  createdAt?: string;
+}
+
+export interface SaleRequest {
+  productId: string;
+  productType: "product" | "handmade" | "build";
+  quantity: number;
+  discount?: number;
+  customerName: string;
+  customerEmail?: string;
+  customerPhone?: string;
+  paymentMethod: string;
+  notes?: string;
+}
+
 class ApiService {
   private baseUrl: string;
 
@@ -158,11 +190,35 @@ class ApiService {
         throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
       }
 
-      return await response.json();
+      const data = await response.json();
+
+      // Convert backend snake_case to frontend camelCase for specific endpoints
+      if (endpoint.includes("/products") || endpoint.includes("/handmade") || endpoint.includes("/builds")) {
+        return this.convertSnakeCaseToCamelCase(data);
+      }
+
+      return data;
     } catch (error) {
       console.error(`API request failed for ${endpoint}:`, error);
       throw error;
     }
+  }
+
+  private convertSnakeCaseToCamelCase<T>(data: any): T {
+    if (Array.isArray(data)) {
+      return data.map((item) => this.convertSnakeCaseToCamelCase(item)) as T;
+    }
+
+    if (data && typeof data === "object") {
+      const converted: any = {};
+      for (const [key, value] of Object.entries(data)) {
+        const camelKey = key.replace(/_([a-z])/g, (_, letter) => letter.toUpperCase());
+        converted[camelKey] = this.convertSnakeCaseToCamelCase(value);
+      }
+      return converted as T;
+    }
+
+    return data as T;
   }
 
   // Products API
@@ -279,8 +335,24 @@ class ApiService {
     }
     console.log("Token validation passed!");
 
-    // Aseguramos que la imagen es una URL string en el JSON
-    const productToSend = { ...product, image: String(product.image) };
+    // Convert frontend camelCase to backend snake_case
+    const productToSend = {
+      name: product.name,
+      description: product.description,
+      price: product.price,
+      thumbnail_image: product.thumbnailImage,
+      category: product.category,
+      subcategory: product.subcategory,
+      original_price: product.originalPrice,
+      feature_images: product.featureImages,
+      specs: product.specs,
+      brand: product.brand,
+      stock: product.stock,
+      acquisition_date: product.acquisitionDate,
+      is_new: product.isNew,
+      is_popular: product.isPopular,
+      is_offer: product.isOffer,
+    };
 
     return this.request("/api/admin/products", {
       method: "POST",
@@ -293,12 +365,32 @@ class ApiService {
   }
 
   async updateProduct(id: string, product: Partial<Product>, token: string): Promise<Product> {
+    // Convert frontend camelCase to backend snake_case
+    const productToSend: any = {};
+
+    if (product.name !== undefined) productToSend.name = product.name;
+    if (product.description !== undefined) productToSend.description = product.description;
+    if (product.price !== undefined) productToSend.price = product.price;
+    if (product.thumbnailImage !== undefined) productToSend.thumbnail_image = product.thumbnailImage;
+    if (product.category !== undefined) productToSend.category = product.category;
+    if (product.subcategory !== undefined) productToSend.subcategory = product.subcategory;
+    if (product.originalPrice !== undefined) productToSend.original_price = product.originalPrice;
+    if (product.featureImages !== undefined) productToSend.feature_images = product.featureImages;
+    if (product.specs !== undefined) productToSend.specs = product.specs;
+    if (product.brand !== undefined) productToSend.brand = product.brand;
+    if (product.stock !== undefined) productToSend.stock = product.stock;
+    if (product.acquisitionDate !== undefined) productToSend.acquisition_date = product.acquisitionDate;
+    if (product.isNew !== undefined) productToSend.is_new = product.isNew;
+    if (product.isPopular !== undefined) productToSend.is_popular = product.isPopular;
+    if (product.isOffer !== undefined) productToSend.is_offer = product.isOffer;
+
     return this.request(`/api/admin/products/${id}`, {
       method: "PUT",
       headers: {
+        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(product),
+      body: JSON.stringify(productToSend),
     });
   }
 
@@ -313,22 +405,58 @@ class ApiService {
 
   // Admin Handmade API
   async createHandmade(handmade: Omit<HandmadeProduct, "id">, token: string): Promise<HandmadeProduct> {
+    // Convert frontend camelCase to backend snake_case
+    const handmadeToSend = {
+      name: handmade.name,
+      description: handmade.description,
+      long_description: handmade.longDescription,
+      price: handmade.price,
+      thumbnail_image: handmade.thumbnailImage,
+      feature_images: handmade.featureImages,
+      category: handmade.category,
+      subcategory: handmade.subcategory,
+      specs: handmade.specs,
+      original_price: handmade.originalPrice,
+      stock: handmade.stock,
+      acquisition_date: handmade.acquisitionDate,
+      is_offer: handmade.isOffer,
+    };
+
     return this.request("/api/admin/handmade", {
       method: "POST",
       headers: {
+        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(handmade),
+      body: JSON.stringify(handmadeToSend),
     });
   }
 
   async updateHandmade(id: string, handmade: Partial<HandmadeProduct>, token: string): Promise<HandmadeProduct> {
+    // Convert frontend camelCase to backend snake_case
+    const handmadeToSend: any = {};
+
+    if (handmade.name !== undefined) handmadeToSend.name = handmade.name;
+    if (handmade.description !== undefined) handmadeToSend.description = handmade.description;
+    if (handmade.longDescription !== undefined) handmadeToSend.long_description = handmade.longDescription;
+    if (handmade.price !== undefined) handmadeToSend.price = handmade.price;
+    if (handmade.thumbnailImage !== undefined) handmadeToSend.thumbnail_image = handmade.thumbnailImage;
+    if (handmade.featureImages !== undefined) handmadeToSend.feature_images = handmade.featureImages;
+    if (handmade.category !== undefined) handmadeToSend.category = handmade.category;
+    if (handmade.subcategory !== undefined) handmadeToSend.subcategory = handmade.subcategory;
+    if (handmade.specs !== undefined) handmadeToSend.specs = handmade.specs;
+    if (handmade.originalPrice !== undefined) handmadeToSend.original_price = handmade.originalPrice;
+    if (handmade.stock !== undefined) handmadeToSend.stock = handmade.stock;
+    if (handmade.acquisitionDate !== undefined) handmadeToSend.acquisition_date = handmade.acquisitionDate;
+    if (handmade.isOffer !== undefined) handmadeToSend.is_offer = handmade.isOffer;
+
     return this.request(`/api/admin/handmade/${id}`, {
       method: "PUT",
       headers: {
+        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(handmade),
+      body: JSON.stringify(handmadeToSend),
     });
   }
 
@@ -345,10 +473,39 @@ class ApiService {
   async getAllBuilds(): Promise<Build[]> {
     return this.request<Build[]>("/api/builds");
   }
+
   async deleteBuild(id: string, token: string): Promise<{ message: string }> {
     return this.request(`/api/admin/builds/${id}`, {
       method: "DELETE",
       headers: { Authorization: `Bearer ${token}` },
+    });
+  }
+
+  // Sales API
+  async getAllSales(token: string): Promise<Sale[]> {
+    return this.request<Sale[]>("/api/admin/sales", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  }
+
+  async createSale(sale: SaleRequest, token: string): Promise<Sale> {
+    return this.request("/api/admin/sales", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(sale),
+    });
+  }
+
+  async getSaleById(id: string, token: string): Promise<Sale> {
+    return this.request<Sale>(`/api/admin/sales/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
   }
 }
