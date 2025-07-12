@@ -6,18 +6,20 @@ export interface Product {
   name: Record<string, string>;
   description: Record<string, string>;
   price: string;
-  originalPrice?: string;
-  stock?: string;
-  acquisitionDate?: string;
-  image: string;
+  thumbnailImage: string;
   category: string;
   subcategory: string;
-  images?: string[];
+  originalPrice?: string;
+  featureImages?: string[];
   specs?: Record<string, string>;
   brand?: string;
+  stock?: number;
+  acquisitionDate?: string;
   isNew?: boolean;
   isPopular?: boolean;
   isOffer?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface HandmadeProduct {
@@ -26,13 +28,43 @@ export interface HandmadeProduct {
   description: Record<string, string>;
   longDescription: Record<string, string>;
   price: string;
-  originalPrice?: string;
-  image: string;
-  images: string[];
+  thumbnailImage: string;
+  featureImages: string[];
   category: string;
   subcategory: string;
   specs: Record<string, string>;
+  originalPrice?: string;
+  stock?: number;
+  acquisitionDate?: string;
   isOffer?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface BuildComponent {
+  productId: string;
+  quantity: number;
+  notes?: string;
+}
+
+export interface Build {
+  id: string;
+  name: Record<string, string>;
+  description: Record<string, string>;
+  longDescription: Record<string, string>;
+  price: string;
+  thumbnailImage: string;
+  featureImages: string[];
+  category: string;
+  subcategory: string;
+  specs: Record<string, string>;
+  components: BuildComponent[];
+  originalPrice?: string;
+  stock?: number;
+  acquisitionDate?: string;
+  isOffer?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 class ApiService {
@@ -306,6 +338,17 @@ class ApiService {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+    });
+  }
+
+  // Builds API
+  async getAllBuilds(): Promise<Build[]> {
+    return this.request<Build[]>("/api/builds");
+  }
+  async deleteBuild(id: string, token: string): Promise<{ message: string }> {
+    return this.request(`/api/admin/builds/${id}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
     });
   }
 }

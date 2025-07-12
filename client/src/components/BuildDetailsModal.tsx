@@ -8,15 +8,20 @@ interface Build {
   description: Record<string, string>;
   longDescription: Record<string, string>;
   price: string;
-  originalPrice?: string;
-  mainImage: string;
-  images: string[];
+  thumbnailImage: string;
+  featureImages: string[];
   category: string;
+  subcategory: string;
   specs: Record<string, string>;
-  features: string[];
+  components: { productId: string; quantity: number; notes?: string }[];
+  originalPrice?: string;
+  stock?: number;
+  acquisitionDate?: string;
   isOffer?: boolean;
   isNew?: boolean;
   isPopular?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 interface BuildDetailsModalProps {
@@ -91,7 +96,7 @@ const BuildDetailsModal: React.FC<BuildDetailsModalProps> = ({ build, isOpen, on
             {/* Columna izquierda - Imágenes */}
             <div>
               <img
-                src={build.mainImage}
+                src={build.thumbnailImage}
                 alt={build.name[lang] || build.name.es}
                 style={{
                   width: "100%",
@@ -100,11 +105,11 @@ const BuildDetailsModal: React.FC<BuildDetailsModalProps> = ({ build, isOpen, on
                 }}
               />
               <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
-                {build.images.slice(1, 4).map((img, index) => (
+                {build.featureImages.slice(0, 3).map((img, index) => (
                   <img
                     key={index}
                     src={img}
-                    alt={`${build.name[lang] || build.name.es} ${index + 2}`}
+                    alt={`${build.name[lang] || build.name.es} ${index + 1}`}
                     style={{
                       width: "80px",
                       height: "60px",
@@ -155,7 +160,9 @@ const BuildDetailsModal: React.FC<BuildDetailsModalProps> = ({ build, isOpen, on
               <div style={{ marginBottom: "1.5rem" }}>
                 <h3 style={{ fontSize: "1.2rem", fontWeight: 600, marginBottom: "1rem" }}>{t("ensambles.modal.features_title") || "Características"}</h3>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
-                  {build.features.map((feature, index) => (
+                  {/* Assuming features are part of the build object or derived */}
+                  {/* For now, we'll just display the first few components as features */}
+                  {build.components.slice(0, 5).map((component, index) => (
                     <span
                       key={index}
                       style={{
@@ -166,7 +173,7 @@ const BuildDetailsModal: React.FC<BuildDetailsModalProps> = ({ build, isOpen, on
                         fontSize: "0.9rem",
                       }}
                     >
-                      {feature}
+                      {component.notes || `Component ${index + 1}`}
                     </span>
                   ))}
                 </div>
@@ -180,7 +187,7 @@ const BuildDetailsModal: React.FC<BuildDetailsModalProps> = ({ build, isOpen, on
                       id: build.id,
                       name: build.name[lang] || build.name.es,
                       price: parseFloat(build.price.replace(/[^0-9.]/g, "")),
-                      image: build.mainImage,
+                      image: build.thumbnailImage,
                     });
                     onClose();
                   }}

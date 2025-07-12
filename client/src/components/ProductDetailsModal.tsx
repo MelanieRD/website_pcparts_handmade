@@ -8,12 +8,19 @@ interface Product {
   longDescription?: Record<string, string>;
   price: string;
   originalPrice?: string;
-  image: string;
-  images?: string[];
+  thumbnailImage: string;
+  featureImages?: string[];
   category: string;
   subcategory: string;
   isOffer?: boolean;
   specs?: Record<string, string>;
+  brand?: string;
+  stock?: number;
+  acquisitionDate?: string;
+  isNew?: boolean;
+  isPopular?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 interface ProductDetailsModalProps {
@@ -27,13 +34,13 @@ const ProductDetailsModal: React.FC<ProductDetailsModalProps> = ({ open, onClose
   const { addToCart } = useCart();
   const [imgIdx, setImgIdx] = useState(0);
   if (!open || !product) return null;
-  const images = product.images && product.images.length > 0 ? product.images : [product.image];
+  const images = product.featureImages && product.featureImages.length > 0 ? product.featureImages : [product.thumbnailImage];
   const handleAdd = () => {
     addToCart({
       id: product.id,
       name: product.name[lang] || product.name["es"],
       price: parseFloat(product.price.replace(/[^0-9.]/g, "")),
-      image: product.image,
+      image: product.thumbnailImage,
     });
     onClose();
   };

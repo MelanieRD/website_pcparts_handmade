@@ -8,15 +8,20 @@ interface Build {
   description: Record<string, string>;
   longDescription: Record<string, string>;
   price: string;
-  originalPrice?: string;
-  mainImage: string;
-  images: string[];
+  thumbnailImage: string;
+  featureImages: string[];
   category: string;
+  subcategory: string;
   specs: Record<string, string>;
-  features: string[];
+  components: { productId: string; quantity: number; notes?: string }[];
+  originalPrice?: string;
+  stock?: number;
+  acquisitionDate?: string;
   isOffer?: boolean;
   isNew?: boolean;
   isPopular?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 interface BuildCardProps {
@@ -56,7 +61,7 @@ const BuildCard: React.FC<BuildCardProps> = ({ build, onViewDetails }) => {
         }}
       >
         <img
-          src={build.mainImage}
+          src={build.thumbnailImage}
           alt={build.name[lang] || build.name.es}
           style={{
             width: "100%",
@@ -196,7 +201,7 @@ const BuildCard: React.FC<BuildCardProps> = ({ build, onViewDetails }) => {
                 id: build.id,
                 name: build.name[lang] || build.name.es,
                 price: parseFloat(build.price.replace(/[^0-9.]/g, "")),
-                image: build.mainImage,
+                image: build.thumbnailImage,
               });
             }}
             style={{

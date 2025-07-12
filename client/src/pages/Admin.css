@@ -1,0 +1,292 @@
+/* Panel de Administración - Estilos Modernos */
+.admin-panel {
+  max-width: 1200px;
+  margin: 20px auto;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  min-height: 80vh;
+}
+
+.admin-header {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 30px;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.admin-header h1 {
+  font-size: 2.5rem;
+  color: #2c3e50;
+  font-weight: 700;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(45deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.admin-content {
+  padding: 30px;
+  background: rgba(255, 255, 255, 0.98);
+}
+
+/* Tabs modernos */
+.admin-tabs {
+  display: flex;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 15px;
+  padding: 8px;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  gap: 8px;
+}
+
+.admin-tab {
+  flex: 1;
+  background: transparent;
+  border: none;
+  padding: 15px 20px;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #6c757d;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.admin-tab::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transition: left 0.5s;
+}
+
+.admin-tab:hover::before {
+  left: 100%;
+}
+
+.admin-tab:hover {
+  color: #495057;
+  transform: translateY(-2px);
+}
+
+.admin-tab.active {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  transform: translateY(-2px);
+}
+
+/* Tabla moderna */
+.admin-table-container {
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  margin-bottom: 25px;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+
+.admin-table th {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  font-weight: 600;
+  padding: 18px 15px;
+  text-align: left;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.admin-table td {
+  padding: 16px 15px;
+  border-bottom: 1px solid #f1f3f4;
+  color: #2c3e50;
+  font-size: 0.95rem;
+}
+
+.admin-table tr:hover {
+  background: linear-gradient(90deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05));
+  transform: scale(1.01);
+  transition: all 0.2s ease;
+}
+
+.admin-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* Botones modernos */
+.admin-btn {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  padding: 10px 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-right: 10px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.admin-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+  background: linear-gradient(135deg, #5a6fd8, #6a4190);
+}
+
+.admin-btn:active {
+  transform: translateY(-1px);
+}
+
+.admin-btn.delete {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+}
+
+.admin-btn.delete:hover {
+  box-shadow: 0 8px 25px rgba(231, 76, 60, 0.4);
+  background: linear-gradient(135deg, #d63031, #a93226);
+}
+
+.admin-btn.add {
+  background: linear-gradient(135deg, #00b894, #00a085);
+  box-shadow: 0 4px 15px rgba(0, 184, 148, 0.3);
+  padding: 15px 30px;
+  font-size: 1rem;
+  margin-top: 20px;
+}
+
+.admin-btn.add:hover {
+  box-shadow: 0 8px 25px rgba(0, 184, 148, 0.4);
+  background: linear-gradient(135deg, #00a085, #008f7a);
+}
+
+/* Estados de carga y error */
+.admin-loading {
+  text-align: center;
+  padding: 60px;
+  color: #6c757d;
+  font-size: 1.2rem;
+}
+
+.admin-loading::after {
+  content: "";
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #667eea;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-left: 10px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.error-message {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  color: white;
+  padding: 15px 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .admin-panel {
+    margin: 10px;
+    border-radius: 15px;
+  }
+
+  .admin-header h1 {
+    font-size: 2rem;
+  }
+
+  .admin-tabs {
+    flex-direction: column;
+  }
+
+  .admin-table {
+    font-size: 0.8rem;
+  }
+
+  .admin-table th,
+  .admin-table td {
+    padding: 10px 8px;
+  }
+
+  .admin-btn {
+    padding: 8px 15px;
+    font-size: 0.8rem;
+    margin-bottom: 5px;
+  }
+}
+
+/* Animaciones adicionales */
+.admin-content {
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Estilos para datos vacíos */
+.admin-table tbody:empty::after {
+  content: "No hay datos disponibles";
+  display: block;
+  text-align: center;
+  padding: 40px;
+  color: #6c757d;
+  font-style: italic;
+  background: #f8f9fa;
+  border-radius: 10px;
+  margin: 20px 0;
+}

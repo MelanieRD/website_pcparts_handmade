@@ -1,230 +1,293 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import "./Admin.css";
 import "../components/FormStyles.css";
 import ProductForm from "../components/ProductForm";
-import type { Product } from "../services/api";
+import HandmadeForm from "../components/HandmadeForm";
+import type { Product, HandmadeProduct, Build } from "../services/api";
 import { apiService } from "../services/api";
 import { useAuth } from "../contexts/AuthContext";
 import AuthDebug from "../components/AuthDebug";
 
+const TABS = ["Productos", "Handmade", "Builds"] as const;
+type TabType = (typeof TABS)[number];
+
+type ModalType = "none" | "product" | "handmade" | "build";
+
+type FormMode = "add" | "edit";
+
 const AdminPanel: React.FC = () => {
-  const [isProductFormOpen, setProductFormOpen] = React.useState(false);
-  const [products, setProducts] = React.useState<Product[]>([]);
-  const [loading, setLoading] = React.useState(true);
-  const [error, setError] = React.useState("");
+  const [tab, setTab] = useState<TabType>("Productos");
+  const [modal, setModal] = useState<ModalType>("none");
+  const [formMode, setFormMode] = useState<FormMode>("add");
+  const [editItem, setEditItem] = useState<any>(null);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [handmade, setHandmade] = useState<HandmadeProduct[]>([]);
+  const [builds, setBuilds] = useState<Build[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const { token, user, isAdmin } = useAuth();
 
-  React.useEffect(() => {
-    console.log("Admin Panel - Token:", token);
-    console.log("Admin Panel - User:", user);
-    console.log("Admin Panel - IsAdmin:", isAdmin);
-    loadProducts();
-  }, [token, user, isAdmin]);
-
-  const loadProducts = async () => {
+  // Cargar datos de cada tipo
+  const loadAll = async () => {
+    setLoading(true);
+    setError("");
     try {
-      setLoading(true);
-      const productsData = await apiService.getAllProducts();
-      setProducts(productsData);
+      const [prods, hands, blds] = await Promise.all([apiService.getAllProducts(), apiService.getAllHandmade(), apiService.getAllBuilds ? apiService.getAllBuilds() : Promise.resolve([])]);
+      setProducts(prods);
+      setHandmade(hands);
+      setBuilds(blds);
     } catch (err) {
-      setError("Error al cargar productos");
+      setError("Error al cargar datos");
       console.error(err);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleAddProduct = async (productData: Omit<Product, "id">) => {
+  useEffect(() => {
+    loadAll();
+  }, []);
+
+  // Handlers para agregar/editar
+  const handleAdd = (type: ModalType) => {
+    setFormMode("add");
+    setEditItem(null);
+    setModal(type);
+  };
+
+  const handleEdit = (type: ModalType, item: any) => {
+    setFormMode("edit");
+    setEditItem(item);
+    setModal(type);
+  };
+
+  const handleCloseModal = () => {
+    setModal("none");
+    setEditItem(null);
+  };
+
+  // Handlers para submit
+  const handleSubmitProduct = async (data: Omit<Product, "id">) => {
+    if (!token) return setError("No tienes permisos de administrador");
     try {
-      console.log("handleAddProduct - Token:", token);
-      console.log("handleAddProduct - User:", user);
-      console.log("handleAddProduct - IsAdmin:", isAdmin);
-      console.log("handleAddProduct - ProductData:", productData);
-
-      if (!token) {
-        setError("No tienes permisos de administrador - Token no encontrado");
-        return;
-      }
-
-      if (!isAdmin) {
-        setError("No tienes permisos de administrador - Usuario no es admin");
-        return;
-      }
-
-      console.log("handleAddProduct - Calling API with token:", token);
-      await apiService.createProduct(productData, token);
-      await loadProducts(); // Recargar la lista
-      setProductFormOpen(false);
-      setError(""); // Clear any previous errors
+      if (formMode === "add") await apiService.createProduct(data, token);
+      else if (editItem) await apiService.updateProduct(editItem.id, data, token);
+      await loadAll();
+      handleCloseModal();
     } catch (err: any) {
-      console.error("handleAddProduct - Error:", err);
-      if (err.message?.includes("401")) {
-        setError("Error de autenticación: Token inválido o expirado. Por favor, inicia sesión nuevamente.");
-      } else if (err.message?.includes("403")) {
-        setError("Error de permisos: No tienes permisos de administrador.");
-      } else {
-        setError(`Error al crear el producto: ${err.message || "Error desconocido"}`);
-      }
+      setError("Error al guardar producto: " + (err.message || err));
     }
   };
 
-  const handleDeleteProduct = async (id: string) => {
-    if (!token) {
-      setError("No tienes permisos de administrador");
-      return;
+  const handleSubmitHandmade = async (data: Omit<HandmadeProduct, "id">) => {
+    if (!token) return setError("No tienes permisos de administrador");
+    try {
+      if (formMode === "add") await apiService.createHandmade(data, token);
+      else if (editItem) await apiService.updateHandmade(editItem.id, data, token);
+      await loadAll();
+      handleCloseModal();
+    } catch (err: any) {
+      setError("Error al guardar handmade: " + (err.message || err));
     }
+  };
+  // TODO: Implementar handleSubmitBuild
 
-    if (window.confirm("¿Estás seguro de que quieres eliminar este producto?")) {
-      try {
-        await apiService.deleteProduct(id, token);
-        await loadProducts(); // Recargar la lista
-      } catch (err) {
-        setError("Error al eliminar el producto");
-        console.error(err);
-      }
+  // Handlers para eliminar
+  const handleDelete = async (type: ModalType, id: string) => {
+    if (!token) return setError("No tienes permisos de administrador");
+    if (!window.confirm("¿Seguro que quieres eliminar este elemento?")) return;
+    try {
+      if (type === "product") await apiService.deleteProduct(id, token);
+      if (type === "handmade") await apiService.deleteHandmade(id, token);
+      if (type === "build" && apiService.deleteBuild) await apiService.deleteBuild(id, token);
+      await loadAll();
+    } catch (err) {
+      setError("Error al eliminar");
     }
   };
 
-  if (loading) {
-    return <div className="admin-panel">Cargando productos...</div>;
-  }
+  if (loading)
+    return (
+      <div className="admin-panel">
+        <div className="admin-loading">Cargando datos del panel de administración...</div>
+      </div>
+    );
 
-  // Check if user is authenticated and is admin
-  if (!token || !user) {
+  if (!token || !user)
     return (
       <div className="admin-panel">
         <div className="error-message">Debes iniciar sesión para acceder al panel de administración.</div>
       </div>
     );
-  }
 
-  if (!isAdmin) {
+  if (!isAdmin)
     return (
       <div className="admin-panel">
         <div className="error-message">No tienes permisos de administrador para acceder a esta página.</div>
       </div>
     );
-  }
+
+  // Render tabla según tab
+  const renderTable = () => {
+    if (tab === "Productos") {
+      return (
+        <>
+          <div className="admin-table-container">
+            <table className="admin-table">
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Categoría</th>
+                  <th>Precio</th>
+                  <th>Stock</th>
+                  <th>Fecha</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {products.map((p) => (
+                  <tr key={p.id}>
+                    <td>{p.name.es || p.name.en}</td>
+                    <td>{p.category}</td>
+                    <td>${p.price}</td>
+                    <td>{p.stock ?? "-"}</td>
+                    <td>{p.acquisitionDate ?? "-"}</td>
+                    <td>
+                      <button className="admin-btn" onClick={() => handleEdit("product", p)}>
+                        Editar
+                      </button>
+                      <button className="admin-btn delete" onClick={() => handleDelete("product", p.id)}>
+                        Eliminar
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <button className="admin-btn add" onClick={() => handleAdd("product")}>
+            ➕ Agregar Producto
+          </button>
+        </>
+      );
+    }
+
+    if (tab === "Handmade") {
+      return (
+        <>
+          <div className="admin-table-container">
+            <table className="admin-table">
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Categoría</th>
+                  <th>Precio</th>
+                  <th>Stock</th>
+                  <th>Fecha</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {handmade.map((h) => (
+                  <tr key={h.id}>
+                    <td>{h.name.es || h.name.en}</td>
+                    <td>{h.category}</td>
+                    <td>${h.price}</td>
+                    <td>{h.stock ?? "-"}</td>
+                    <td>{h.acquisitionDate ?? "-"}</td>
+                    <td>
+                      <button className="admin-btn" onClick={() => handleEdit("handmade", h)}>
+                        Editar
+                      </button>
+                      <button className="admin-btn delete" onClick={() => handleDelete("handmade", h.id)}>
+                        Eliminar
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <button className="admin-btn add" onClick={() => handleAdd("handmade")}>
+            ➕ Agregar Handmade
+          </button>
+        </>
+      );
+    }
+
+    if (tab === "Builds") {
+      return (
+        <>
+          <div className="admin-table-container">
+            <table className="admin-table">
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Categoría</th>
+                  <th>Precio</th>
+                  <th>Stock</th>
+                  <th>Fecha</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {builds.map((b) => (
+                  <tr key={b.id}>
+                    <td>{b.name.es || b.name.en}</td>
+                    <td>{b.category}</td>
+                    <td>${b.price}</td>
+                    <td>{b.stock ?? "-"}</td>
+                    <td>{b.acquisitionDate ?? "-"}</td>
+                    <td>
+                      <button className="admin-btn" onClick={() => handleEdit("build", b)}>
+                        Editar
+                      </button>
+                      <button className="admin-btn delete" onClick={() => handleDelete("build", b.id)}>
+                        Eliminar
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <button className="admin-btn add" onClick={() => handleAdd("build")}>
+            ➕ Agregar Build
+          </button>
+        </>
+      );
+    }
+    return null;
+  };
 
   return (
     <div className="admin-panel">
-      <div className="admin-header">Panel de Administración</div>
-      <AuthDebug />
-      {error && <div className="error-message">{error}</div>}
-      <table className="admin-table">
-        <thead>
-          <tr>
-            <th>Producto</th>
-            <th>Categoría</th>
-            <th>Precio</th>
-            <th>Stock</th>
-            <th>Fecha Adquisición</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {products.map((product) => (
-            <tr key={product.id}>
-              <td>{product.name.es || product.name.en}</td>
-              <td>{product.category}</td>
-              <td>${product.price}</td>
-              <td>{product.stock || "N/A"}</td>
-              <td>{product.acquisitionDate || "N/A"}</td>
-              <td>
-                <button className="admin-btn">Editar</button>
-                <button className="admin-btn" onClick={() => handleDeleteProduct(product.id)}>
-                  Eliminar
-                </button>
-              </td>
-            </tr>
+      <div className="admin-header">
+        <h1>Panel de Administración</h1>
+      </div>
+
+      <div className="admin-content">
+        <AuthDebug />
+        {error && <div className="error-message">{error}</div>}
+
+        <div className="admin-tabs">
+          {TABS.map((t) => (
+            <button key={t} className={`admin-tab${tab === t ? " active" : ""}`} onClick={() => setTab(t)}>
+              {t}
+            </button>
           ))}
-        </tbody>
-      </table>
-      <button className="admin-btn" onClick={() => setProductFormOpen(true)}>
-        Agregar Producto
-      </button>
-      <button
-        className="admin-btn"
-        onClick={async () => {
-          try {
-            console.log("Testing API connection...");
-            const health = await apiService.healthCheck();
-            console.log("Health check result:", health);
-            alert(`API is healthy: ${JSON.stringify(health)}`);
-          } catch (err) {
-            console.error("Health check failed:", err);
-            alert(`API health check failed: ${err}`);
-          }
-        }}
-      >
-        Test API Connection
-      </button>
-      <button
-        className="admin-btn"
-        onClick={async () => {
-          if (!token) {
-            alert("No token available");
-            return;
-          }
-          try {
-            console.log("Testing authentication...");
-            const user = await apiService.testAuth(token);
-            alert(`Auth test successful: ${JSON.stringify(user)}`);
-          } catch (err) {
-            console.error("Auth test failed:", err);
-            alert(`Auth test failed: ${err}`);
-          }
-        }}
-      >
-        Test Authentication
-      </button>
-      <button
-        className="admin-btn"
-        onClick={async () => {
-          if (!token) {
-            alert("No token available");
-            return;
-          }
-          try {
-            console.log("Testing admin access...");
-            const result = await apiService.testAdminAccess(token);
-            alert(`Admin access test successful: ${JSON.stringify(result)}`);
-          } catch (err) {
-            console.error("Admin access test failed:", err);
-            alert(`Admin access test failed: ${err}`);
-          }
-        }}
-      >
-        Test Admin Access
-      </button>
-      <button
-        className="admin-btn"
-        onClick={() => {
-          console.log("=== IMMEDIATE TOKEN DEBUG ===");
-          console.log("Token from context:", token);
-          console.log("User from context:", user);
-          console.log("IsAdmin from context:", isAdmin);
-          if (token) {
-            try {
-              const parts = token.split(".");
-              console.log("Token parts count:", parts.length);
-              if (parts.length === 3) {
-                const payload = JSON.parse(atob(parts[1]));
-                console.log("Token payload:", payload);
-                console.log("Token role:", payload.role);
-                console.log("Token exp:", payload.exp);
-                console.log("Current time:", Date.now() / 1000);
-                console.log("Is expired:", payload.exp < Date.now() / 1000);
-              }
-            } catch (e) {
-              console.error("Error parsing token:", e);
-            }
-          }
-          alert("Check console for token debug info");
-        }}
-      >
-        Debug Token
-      </button>
-      <ProductForm isOpen={isProductFormOpen} onClose={() => setProductFormOpen(false)} onSubmit={handleAddProduct} mode="add" />
+        </div>
+
+        {renderTable()}
+      </div>
+
+      {/* Modal de formulario dinámico */}
+      {modal === "product" && <ProductForm product={formMode === "edit" ? editItem : null} isOpen={modal === "product"} onClose={handleCloseModal} onSubmit={handleSubmitProduct} mode={formMode} />}
+
+      {modal === "handmade" && (
+        <HandmadeForm handmade={formMode === "edit" ? editItem : null} isOpen={modal === "handmade"} onClose={handleCloseModal} onSubmit={handleSubmitHandmade} mode={formMode} />
+      )}
+      {/* TODO: Modal para builds */}
     </div>
   );
 };
