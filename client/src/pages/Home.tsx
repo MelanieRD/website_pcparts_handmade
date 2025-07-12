@@ -22,11 +22,11 @@ const Home: React.FC = () => {
     <div style={{ fontFamily: "Inter, system-ui, sans-serif" }}>
       <Navigation />
 
-      {/* Hero Section con fondo de piezas de computadora */}
+      {/* Hero Section with gaming keyboard background */}
       <section
         style={{
-          background: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
-                    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><pattern id="pc-parts" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse"><rect width="200" height="200" fill="%23000"/><circle cx="50" cy="50" r="20" fill="%23667eea" opacity="0.3"/><rect x="100" y="30" width="60" height="40" fill="%23764ba2" opacity="0.3"/><polygon points="30,120 60,100 90,120 60,140" fill="%23f093fb" opacity="0.3"/><rect x="120" y="120" width="40" height="40" fill="%23667eea" opacity="0.3"/><circle cx="80" cy="160" r="15" fill="%23764ba2" opacity="0.3"/></pattern></defs><rect width="100%" height="100%" fill="url(%23pc-parts)"/></svg>')`,
+          background: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
+                    url('/background.jpg')`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundAttachment: "fixed",
@@ -47,14 +47,14 @@ const Home: React.FC = () => {
               color: "white",
               marginBottom: "1.5rem",
               lineHeight: 1.2,
-              textShadow: "0 4px 8px rgba(0,0,0,0.5)",
+             
               background: "linear-gradient(45deg, #667eea, #764ba2, #f093fb)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
               backgroundClip: "text",
             }}
           >
-            🖥️ {t("home.brand") || "CyborgTech"}
+             {t("home.brand") || "CyborgTech"}
           </h1>
 
           <p
@@ -72,22 +72,6 @@ const Home: React.FC = () => {
             {t("home.hero")}
           </p>
 
-          {/* Ubicación destacada */}
-          <div
-            style={{
-              background: "rgba(255,255,255,0.1)",
-              backdropFilter: "blur(10px)",
-              border: "1px solid rgba(255,255,255,0.2)",
-              borderRadius: "15px",
-              padding: "1rem 2rem",
-              marginBottom: "2rem",
-              display: "inline-block",
-            }}
-          >
-            <span style={{ color: "white", fontSize: "1.1rem", fontWeight: 600 }}>📍 {t("home.location")}</span>
-          </div>
-
-          {/* Search bar mejorado */}
           <div style={{ display: "flex", justifyContent: "center", marginBottom: "2rem" }}>
             <div
               style={{
@@ -96,23 +80,7 @@ const Home: React.FC = () => {
                 width: "100%",
               }}
             >
-              <input
-                type="text"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder={t("home.search_placeholder")}
-                style={{
-                  padding: "1rem 1.5rem",
-                  borderRadius: "25px",
-                  border: "none",
-                  fontSize: "1.1rem",
-                  width: "100%",
-                  outline: "none",
-                  background: "rgba(255,255,255,0.95)",
-                  backdropFilter: "blur(10px)",
-                  boxShadow: "0 8px 32px rgba(0,0,0,0.3)",
-                }}
-              />
+             
             </div>
           </div>
 
@@ -206,8 +174,94 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Sección de Ubicación y Contacto */}
+     
+
+      {/* Sección de Productos Destacados */}
       <section
+        style={{
+          padding: "5rem 2rem",
+          background: "linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%)",
+        }}
+      >
+        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+          <h2
+            style={{
+              fontSize: "3rem",
+              fontWeight: 800,
+              textAlign: "center",
+              marginBottom: "1rem",
+              color: "#1f2937",
+            }}
+          >
+            ⭐ {t("home.featured_products_title")}
+          </h2>
+          <p
+            style={{
+              fontSize: "1.2rem",
+              textAlign: "center",
+              color: "#6b7280",
+              marginBottom: "3rem",
+              maxWidth: "600px",
+              marginLeft: "auto",
+              marginRight: "auto",
+            }}
+          >
+            {t("home.featured_products_desc")}
+          </p>
+
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+              gap: "2rem",
+            }}
+          >
+            {[
+              { icon: "🖥️", title: t("home.featured_products.0.title"), desc: t("home.featured_products.0.desc"), price: t("home.featured_products.0.price") },
+              { icon: "💻", title: t("home.featured_products.1.title"), desc: t("home.featured_products.1.desc"), price: t("home.featured_products.1.price") },
+              { icon: "🎮", title: t("home.featured_products.2.title"), desc: t("home.featured_products.2.desc"), price: t("home.featured_products.2.price") },
+              { icon: "✨", title: t("home.featured_products.3.title"), desc: t("home.featured_products.3.desc"), price: t("home.featured_products.3.price") },
+            ].map((item, index) => (
+              <div
+                key={index}
+                style={{
+                  background: "white",
+                  borderRadius: "20px",
+                  padding: "2rem",
+                  textAlign: "center",
+                  boxShadow: "0 10px 30px rgba(0,0,0,0.1)",
+                  transition: "transform 0.3s ease",
+                  cursor: "pointer",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "translateY(-8px)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "translateY(0)";
+                }}
+              >
+                <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>{item.icon}</div>
+                <h3 style={{ fontSize: "1.3rem", fontWeight: 700, color: "#1f2937", marginBottom: "0.5rem" }}>{item.title}</h3>
+                <p style={{ color: "#6b7280", marginBottom: "1rem" }}>{item.desc}</p>
+                <div
+                  style={{
+                    background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                    color: "white",
+                    padding: "0.5rem 1rem",
+                    borderRadius: "15px",
+                    fontWeight: 600,
+                  }}
+                >
+                  {item.price}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+       {/* Sección de Ubicación y Contacto */}
+       <section
         style={{
           padding: "5rem 2rem",
           background: "white",
@@ -302,91 +356,6 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Sección de Productos Destacados */}
-      <section
-        style={{
-          padding: "5rem 2rem",
-          background: "linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%)",
-        }}
-      >
-        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-          <h2
-            style={{
-              fontSize: "3rem",
-              fontWeight: 800,
-              textAlign: "center",
-              marginBottom: "1rem",
-              color: "#1f2937",
-            }}
-          >
-            ⭐ {t("home.featured_products_title")}
-          </h2>
-          <p
-            style={{
-              fontSize: "1.2rem",
-              textAlign: "center",
-              color: "#6b7280",
-              marginBottom: "3rem",
-              maxWidth: "600px",
-              marginLeft: "auto",
-              marginRight: "auto",
-            }}
-          >
-            {t("home.featured_products_desc")}
-          </p>
-
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-              gap: "2rem",
-            }}
-          >
-            {[
-              { icon: "🖥️", title: t("home.featured_products.0.title"), desc: t("home.featured_products.0.desc"), price: t("home.featured_products.0.price") },
-              { icon: "💻", title: t("home.featured_products.1.title"), desc: t("home.featured_products.1.desc"), price: t("home.featured_products.1.price") },
-              { icon: "🎮", title: t("home.featured_products.2.title"), desc: t("home.featured_products.2.desc"), price: t("home.featured_products.2.price") },
-              { icon: "✨", title: t("home.featured_products.3.title"), desc: t("home.featured_products.3.desc"), price: t("home.featured_products.3.price") },
-            ].map((item, index) => (
-              <div
-                key={index}
-                style={{
-                  background: "white",
-                  borderRadius: "20px",
-                  padding: "2rem",
-                  textAlign: "center",
-                  boxShadow: "0 10px 30px rgba(0,0,0,0.1)",
-                  transition: "transform 0.3s ease",
-                  cursor: "pointer",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-8px)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "translateY(0)";
-                }}
-              >
-                <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>{item.icon}</div>
-                <h3 style={{ fontSize: "1.3rem", fontWeight: 700, color: "#1f2937", marginBottom: "0.5rem" }}>{item.title}</h3>
-                <p style={{ color: "#6b7280", marginBottom: "1rem" }}>{item.desc}</p>
-                <div
-                  style={{
-                    background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-                    color: "white",
-                    padding: "0.5rem 1rem",
-                    borderRadius: "15px",
-                    fontWeight: 600,
-                  }}
-                >
-                  {item.price}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section mejorado */}
       <section
         style={{
           padding: "5rem 2rem",
@@ -426,6 +395,7 @@ const Home: React.FC = () => {
           </div>
         </div>
       </section>
+
 
       <Footer />
     </div>
