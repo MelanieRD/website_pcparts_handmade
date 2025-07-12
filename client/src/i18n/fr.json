@@ -1,0 +1,241 @@
+{
+  "navbar": {
+    "home": "Accueil",
+    "pcshop": "Pc Shop",
+    "handmade": "Handmade",
+    "builds": "Assemblages",
+    "contact": "Contact",
+    "search_placeholder": "Rechercher des composants...",
+    "language": "Langue"
+  },
+  "products": {
+    "title": "Nos Produits",
+    "subtitle": "Trouvez les meilleurs composants et accessoires pour votre setup",
+    "filters": {
+      "all": "Tous",
+      "processor": "Processeurs",
+      "graphics": "Cartes Graphiques",
+      "motherboard": "Cartes Mères",
+      "storage": "Stockage",
+      "case": "Boîtiers",
+      "cooling": "Refroidissement",
+      "assembly": "Assemblages",
+      "headset": "Casques",
+      "microphone": "Microphones",
+      "camera": "Caméras",
+      "lights": "Éclairage",
+      "keyboard": "Claviers",
+      "mouse": "Souris",
+      "monitor": "Écrans",
+      "ram": "Mémoire RAM",
+      "psu": "Alimentations",
+      "accessory": "Accessoires",
+      "bundle": "Offres"
+    },
+    "subcategories": {
+      "intel": "Intel",
+      "amd": "AMD",
+      "nvidia": "NVIDIA",
+      "nvme": "NVMe",
+      "ssd": "SSD",
+      "hdd": "HDD",
+      "gaming": "Gaming",
+      "workstation": "Workstation",
+      "office": "Bureau",
+      "mini-itx": "Mini ITX",
+      "liquid": "Refroidissement Liquide",
+      "fans": "Ventilateurs",
+      "air": "Air",
+      "mechanical": "Mécaniques",
+      "optical": "Optiques",
+      "keycaps": "Keycaps",
+      "switches": "Switches",
+      "wireless": "Sans Fil",
+      "studio": "Studio",
+      "usb": "USB",
+      "xlr": "XLR",
+      "webcam": "Webcam",
+      "4k": "4K",
+      "rgb": "RGB",
+      "strips": "Bandes LED",
+      "ddr5": "DDR5",
+      "modular": "Modulaire"
+    },
+    "sort_by": "Trier par :",
+    "sort_options": {
+      "name": "Nom",
+      "price_low": "Prix : Croissant",
+      "price_high": "Prix : Décroissant"
+    },
+    "results_count": "produits trouvés",
+    "no_results": "Aucun produit trouvé avec les filtres sélectionnés",
+    "offers": "Offres",
+    "show_offers_only": "Offres Seulement",
+    "filters_title": "Filtres et Recherche"
+  },
+  "home": {
+    "welcome": "Bienvenue chez CyborgTech",
+    "description": "Votre boutique spécialisée en ordinateurs et accessoires high-tech. Trouvez les meilleurs produits pour le gaming, le travail et le divertissement.",
+    "see_products": "Voir les produits",
+    "contact_us": "Nous contacter",
+    "why_us": "Pourquoi choisir CyborgTech ?",
+    "features": [
+      {
+        "title": "Produits Gaming",
+        "description": "Les meilleurs ordinateurs et accessoires gaming avec des performances exceptionnelles."
+      },
+      {
+        "title": "Technologie de pointe",
+        "description": "Des produits avec les dernières technologies et des composants de haute qualité."
+      },
+      {
+        "title": "Support technique",
+        "description": "Conseils spécialisés et support technique pour tous nos produits."
+      },
+      {
+        "title": "Garantie étendue",
+        "description": "Garantie sur tous nos produits avec un service après-vente fiable."
+      }
+    ],
+    "cta_title": "Prêt à booster votre setup ?",
+    "cta_desc": "Rejoignez des milliers de gamers et de professionnels qui font déjà confiance à CyborgTech pour obtenir les meilleures performances.",
+    "cta_button": "Explorer les produits"
+  },
+  "footer": {
+    "copyright": "© 2024 CyborgTech. Tous droits réservés."
+  },
+  "handmade": {
+    "loading": "Chargement des produits artisanaux...",
+    "title": "Produits Artisanaux",
+    "subtitle": "Découvrez des produits uniques et personnalisés faits à la main pour votre setup. Chaque pièce est une œuvre d'art créée avec passion et dévouement.",
+    "categories": {
+      "keycaps": "Keycaps",
+      "mousepads": "Tapis de Souris",
+      "wrist_rests": "Repose-poignets",
+      "cables": "Câbles",
+      "rgb": "RGB",
+      "stands": "Supports"
+    },
+    "why_choose": {
+      "title": "Pourquoi choisir des produits artisanaux ?",
+      "unique": {
+        "title": "Uniques",
+        "description": "Chaque pièce est unique et personnalisée selon vos préférences"
+      },
+      "quality": {
+        "title": "Qualité",
+        "description": "Faits à la main avec des matériaux premium et attention aux détails"
+      },
+      "customization": {
+        "title": "Personnalisation",
+        "description": "Designs entièrement personnalisables pour votre setup"
+      }
+    }
+  },
+  "common": {
+    "loading": "Chargement..."
+  },
+  "home": {
+    "brand": "CyborgTech",
+    "hero": "Votre boutique de confiance pour les composants informatiques à Samaná, Las Terrenas. Composants de haute qualité, assemblages personnalisés et produits artisanaux uniques.",
+    "location": "Situé à Samaná, Las Terrenas - République Dominicaine",
+    "search_placeholder": "🔍 Rechercher des composants, assemblages, produits artisanaux...",
+    "cta_products": "Voir les produits",
+    "cta_builds": "Assemblages",
+    "cta_handmade": "Handmade",
+    "services_title": "Nos Services",
+    "services": [
+      { "title": "Vente de Composants", "desc": "Processeurs, cartes graphiques, RAM, disques durs, alimentations et plus. Marques de premier plan avec garantie." },
+      { "title": "Assemblages Personnalisés", "desc": "PC gaming, stations de travail, équipements de bureau et plus. Assemblés par des experts avec optimisation et overclocking." },
+      { "title": "Produits Artisanaux", "desc": "Keycaps personnalisés, tapis de souris, repose-poignets et plus. Produits uniques faits à la main pour votre setup." }
+    ],
+    "find_us": "Trouvez-nous à Las Terrenas",
+    "find_us_desc": "Nous sommes situés au cœur de Las Terrenas, Samaná. L'une des plus belles régions de la République Dominicaine, connue pour ses plages paradisiaques et son ambiance touristique.",
+    "why_terrenas": "Pourquoi Las Terrenas ?",
+    "terrenas_beach": "Plage de Las Terrenas - 5 min",
+    "catey_airport": "Aéroport El Catey - 20 min",
+    "tourist_center": "Centre touristique actif",
+    "tech_community": "Communauté technologique en croissance",
+    "contact_btn": "Contacter",
+    "hours_title": "Horaires d'ouverture",
+    "hours_weekdays_label": "Lundi - Vendredi :",
+    "hours_weekdays": "9h00 - 19h00",
+    "hours_saturday_label": "Samedis :",
+    "hours_saturday": "9h00 - 17h00",
+    "hours_sunday_label": "Dimanches :",
+    "hours_sunday": "10h00 - 15h00",
+    "quick_contact": "Contact Rapide",
+    "whatsapp": "WhatsApp : +1 (809) XXX-XXXX",
+    "email": "Email : info@cyborgtech.com",
+    "shipping": "Livraison disponible dans toute Samaná",
+    "featured_products_title": "Produits en Vedette",
+    "featured_products_desc": "Les composants les plus populaires et demandés par nos clients",
+    "featured_products": [
+      { "title": "PCs Gaming", "desc": "RTX 4070, RTX 4080, RTX 4090", "price": "À partir de 1 299 $" },
+      { "title": "Laptops", "desc": "Gaming et Workstation", "price": "À partir de 899 $" },
+      { "title": "Périphériques", "desc": "Claviers, souris, casques", "price": "À partir de 29 $" },
+      { "title": "Handmade", "desc": "Keycaps et accessoires uniques", "price": "À partir de 24 $" }
+    ],
+    "cta_ready_title": "Prêt pour votre prochain setup ?",
+    "cta_ready_desc": "Venez nous rendre visite à Las Terrenas ou contactez-nous pour un conseil personnalisé. Construisez votre PC de rêve avec CyborgTech !",
+    "cta_ready_cta_products": "Voir le catalogue",
+    "cta_ready_contact_btn": "Contacter"
+  },
+  "ensambles": {
+    "loading": "Chargement des assemblages...",
+    "title": "Assemblages Personnalisés",
+    "subtitle": "Découvrez nos PC assemblés sur mesure avec des composants de haute qualité. Chaque assemblage est unique et optimisé pour votre usage spécifique.",
+    "categories": {
+      "gaming": "Gaming",
+      "workstation": "Workstation",
+      "streaming": "Streaming",
+      "office": "Bureau",
+      "creative": "Créatif",
+      "performance": "Performance"
+    },
+    "badges": {
+      "new": "Nouveau",
+      "popular": "Populaire",
+      "offer": "Offre"
+    },
+    "actions": {
+      "view_details": "Voir les détails"
+    },
+    "why_choose": {
+      "title": "Pourquoi choisir nos assemblages ?",
+      "professional": {
+        "title": "Assemblage Professionnel",
+        "description": "Chaque PC est assemblé par des experts avec des années d'expérience"
+      },
+      "optimization": {
+        "title": "Optimisation Complète",
+        "description": "Configuration et overclocking optimisés pour des performances maximales"
+      },
+      "warranty": {
+        "title": "Garantie Étendue",
+        "description": "Garantie de 2 ans sur tout le système et support technique"
+      }
+    },
+    "modal": {
+      "specs_title": "Spécifications",
+      "features_title": "Caractéristiques",
+      "add_to_cart": "Ajouter au panier",
+      "close": "Fermer"
+    }
+  },
+  "contact": {
+    "title": "Contact",
+    "description": "Avez-vous des questions, des commentaires ou souhaitez-vous citer un produit ? Écrivez-nous et nous répondrons dès que possible.",
+    "form": {
+      "name": "Nom",
+      "email": "Email",
+      "message": "Message",
+      "submit": "Envoyer le message"
+    }
+  },
+  "details": {
+    "back": "Retour",
+    "not_found": "Produit non trouvé",
+    "add_to_cart": "Ajouter au panier"
+  }
+}

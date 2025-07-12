@@ -1,0 +1,137 @@
+/* Formulario general */
+.form-modal-bg {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.12);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.form-container {
+  max-width: 600px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.07);
+  padding: 32px 32px 24px 32px;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+.form-title {
+  text-align: center;
+  font-size: 1.5rem;
+  color: #27ae60;
+  margin-bottom: 24px;
+  font-weight: 600;
+}
+.form-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+.form-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.form-label {
+  font-size: 1rem;
+  color: #222;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+.form-input {
+  padding: 10px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 1rem;
+  background: #f8fafc;
+  transition: border 0.2s;
+}
+.form-input:focus {
+  border: 1.5px solid #2ecc71;
+  outline: none;
+  background: #fff;
+}
+.form-btn {
+  background: #2ecc71;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 12px 24px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-right: 10px;
+  transition: background 0.2s;
+}
+.form-btn:hover {
+  background: #27ae60;
+}
+.form-btn-cancel {
+  background: #e0e0e0;
+  color: #333;
+}
+.form-btn-cancel:hover {
+  background: #bdbdbd;
+}
+.form-error {
+  color: #c0392b;
+  background: #fdecea;
+  border: 1px solid #e57373;
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin-bottom: 12px;
+  text-align: center;
+  font-size: 1rem;
+}
+
+/* Panel de administración */
+.admin-panel {
+  max-width: 900px;
+  margin: 40px auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.07);
+  padding: 32px;
+}
+.admin-header {
+  font-size: 1.6rem;
+  color: #27ae60;
+  font-weight: 700;
+  margin-bottom: 24px;
+  text-align: center;
+}
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 24px;
+}
+.admin-table th,
+.admin-table td {
+  border: 1px solid #e5e7eb;
+  padding: 12px 10px;
+  text-align: left;
+}
+.admin-table th {
+  background: #f0fdf4;
+  color: #27ae60;
+  font-weight: 600;
+}
+.admin-table tr:nth-child(even) {
+  background: #f8fafc;
+}
+.admin-btn {
+  background: #2ecc71;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 18px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  margin-right: 8px;
+  transition: background 0.2s;
+}
+.admin-btn:hover {
+  background: #27ae60;
+}

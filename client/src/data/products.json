@@ -1,0 +1,529 @@
+[
+  {
+    "id": "1",
+    "name": { "es": "PC Gamer Nitro", "en": "Nitro Gaming PC", "fr": "PC Gamer Nitro" },
+    "description": {
+      "es": "Potente PC para gaming con tarjeta gráfica RTX 4070 y procesador Intel i7-13700K.",
+      "en": "Powerful gaming PC with RTX 4070 graphics and Intel i7-13700K processor.",
+      "fr": "PC gaming puissant avec carte graphique RTX 4070 et processeur Intel i7-13700K."
+    },
+    "price": "$1,299.00",
+    "image": "/assets/pc-gamer-nitro.png",
+    "category": "assembly",
+    "subcategory": "gaming"
+  },
+  {
+    "id": "2",
+    "name": { "es": "PC Workstation Pro", "en": "Pro Workstation PC", "fr": "PC Workstation Pro" },
+    "description": {
+      "es": "Estación de trabajo profesional con procesador AMD Ryzen 9 y 32GB RAM.",
+      "en": "Professional workstation with AMD Ryzen 9 processor and 32GB RAM.",
+      "fr": "Station de travail professionnelle avec processeur AMD Ryzen 9 et 32GB RAM."
+    },
+    "price": "$2,199.00",
+    "image": "/assets/pc-workstation.png",
+    "category": "assembly",
+    "subcategory": "workstation"
+  },
+  {
+    "id": "3",
+    "name": { "es": "PC Básica Office", "en": "Basic Office PC", "fr": "PC Bureau Basique" },
+    "description": {
+      "es": "PC económica para oficina con procesador Intel i3 y 8GB RAM.",
+      "en": "Affordable office PC with Intel i3 processor and 8GB RAM.",
+      "fr": "PC bureau abordable avec processeur Intel i3 et 8GB RAM."
+    },
+    "price": "$499.00",
+    "image": "/assets/pc-office.png",
+    "category": "assembly",
+    "subcategory": "office"
+  },
+  {
+    "id": "4",
+    "name": { "es": "Procesador Intel i7-13700K", "en": "Intel i7-13700K Processor", "fr": "Processeur Intel i7-13700K" },
+    "description": {
+      "es": "Procesador de alto rendimiento con 16 núcleos y 24 hilos.",
+      "en": "High-performance processor with 16 cores and 24 threads.",
+      "fr": "Processeur haute performance avec 16 cœurs et 24 threads."
+    },
+    "price": "$399.99",
+    "image": "/assets/procesador-i7.png",
+    "category": "processor",
+    "subcategory": "intel"
+  },
+  {
+    "id": "5",
+    "name": { "es": "Procesador AMD Ryzen 9 7900X", "en": "AMD Ryzen 9 7900X Processor", "fr": "Processeur AMD Ryzen 9 7900X" },
+    "description": {
+      "es": "Procesador AMD de 12 núcleos con arquitectura Zen 4.",
+      "en": "AMD processor with 12 cores and Zen 4 architecture.",
+      "fr": "Processeur AMD avec 12 cœurs et architecture Zen 4."
+    },
+    "price": "$549.99",
+    "image": "/assets/procesador-ryzen9.png",
+    "category": "processor",
+    "subcategory": "amd"
+  },
+  {
+    "id": "6",
+    "name": { "es": "Tarjeta Gráfica RTX 4070", "en": "RTX 4070 Graphics Card", "fr": "Carte Graphique RTX 4070" },
+    "description": {
+      "es": "Tarjeta gráfica gaming con 12GB GDDR6X y ray tracing.",
+      "en": "Gaming graphics card with 12GB GDDR6X and ray tracing.",
+      "fr": "Carte graphique gaming avec 12GB GDDR6X et ray tracing."
+    },
+    "price": "$599.99",
+    "image": "/assets/rtx-4070.png",
+    "category": "graphics",
+    "subcategory": "nvidia"
+  },
+  {
+    "id": "7",
+    "name": { "es": "Tarjeta Gráfica RX 7800 XT", "en": "RX 7800 XT Graphics Card", "fr": "Carte Graphique RX 7800 XT" },
+    "description": {
+      "es": "Tarjeta gráfica AMD con 16GB GDDR6 y FSR 3.0.",
+      "en": "AMD graphics card with 16GB GDDR6 and FSR 3.0.",
+      "fr": "Carte graphique AMD avec 16GB GDDR6 et FSR 3.0."
+    },
+    "price": "$499.99",
+    "image": "/assets/rx-7800xt.png",
+    "category": "graphics",
+    "subcategory": "amd"
+  },
+  {
+    "id": "8",
+    "name": { "es": "Placa Base Z690", "en": "Z690 Motherboard", "fr": "Carte Mère Z690" },
+    "description": {
+      "es": "Placa base premium con soporte para DDR5 y PCIe 5.0.",
+      "en": "Premium motherboard with DDR5 and PCIe 5.0 support.",
+      "fr": "Carte mère premium avec support DDR5 et PCIe 5.0."
+    },
+    "price": "$249.99",
+    "image": "/assets/motherboard-z690.png",
+    "category": "motherboard",
+    "subcategory": "intel"
+  },
+  {
+    "id": "9",
+    "name": { "es": "Placa Base X670E", "en": "X670E Motherboard", "fr": "Carte Mère X670E" },
+    "description": {
+      "es": "Placa base AMD con soporte para Ryzen 7000 y PCIe 5.0.",
+      "en": "AMD motherboard with Ryzen 7000 and PCIe 5.0 support.",
+      "fr": "Carte mère AMD avec support Ryzen 7000 et PCIe 5.0."
+    },
+    "price": "$299.99",
+    "image": "/assets/motherboard-x670e.png",
+    "category": "motherboard",
+    "subcategory": "amd"
+  },
+  {
+    "id": "10",
+    "name": { "es": "SSD NVMe 1TB", "en": "1TB NVMe SSD", "fr": "SSD NVMe 1TB" },
+    "description": {
+      "es": "Disco sólido NVMe de alta velocidad con 7000MB/s de lectura.",
+      "en": "High-speed NVMe SSD with 7000MB/s read speed.",
+      "fr": "SSD NVMe haute vitesse avec 7000MB/s de vitesse de lecture."
+    },
+    "price": "$89.99",
+    "image": "/assets/ssd-1tb.png",
+    "category": "storage",
+    "subcategory": "nvme"
+  },
+  {
+    "id": "11",
+    "name": { "es": "SSD SATA 2TB", "en": "2TB SATA SSD", "fr": "SSD SATA 2TB" },
+    "description": {
+      "es": "Disco sólido SATA con 550MB/s de velocidad de lectura.",
+      "en": "SATA SSD with 550MB/s read speed.",
+      "fr": "SSD SATA avec 550MB/s de vitesse de lecture."
+    },
+    "price": "$129.99",
+    "image": "/assets/ssd-sata-2tb.png",
+    "category": "storage",
+    "subcategory": "ssd"
+  },
+  {
+    "id": "12",
+    "name": { "es": "HDD 4TB", "en": "4TB HDD", "fr": "HDD 4TB" },
+    "description": {
+      "es": "Disco duro mecánico de 4TB para almacenamiento masivo.",
+      "en": "4TB mechanical hard drive for mass storage.",
+      "fr": "Disque dur mécanique 4TB pour stockage de masse."
+    },
+    "price": "$79.99",
+    "image": "/assets/hdd-4tb.png",
+    "category": "storage",
+    "subcategory": "hdd"
+  },
+  {
+    "id": "13",
+    "name": { "es": "Case Gaming RGB", "en": "RGB Gaming Case", "fr": "Boîtier Gaming RGB" },
+    "description": {
+      "es": "Case gaming con ventiladores RGB y panel lateral de cristal.",
+      "en": "Gaming case with RGB fans and tempered glass side panel.",
+      "fr": "Boîtier gaming avec ventilateurs RGB et panneau latéral en verre trempé."
+    },
+    "price": "$149.99",
+    "image": "/assets/case-gaming-rgb.png",
+    "category": "case",
+    "subcategory": "gaming"
+  },
+  {
+    "id": "14",
+    "name": { "es": "Case Mini ITX", "en": "Mini ITX Case", "fr": "Boîtier Mini ITX" },
+    "description": {
+      "es": "Case compacto para builds Mini ITX con diseño minimalista.",
+      "en": "Compact case for Mini ITX builds with minimalist design.",
+      "fr": "Boîtier compact pour builds Mini ITX avec design minimaliste."
+    },
+    "price": "$89.99",
+    "image": "/assets/case-mini-itx.png",
+    "category": "case",
+    "subcategory": "mini-itx"
+  },
+  {
+    "id": "15",
+    "name": { "es": "Refrigeración Líquida 240mm", "en": "240mm Liquid Cooling", "fr": "Refroidissement Liquide 240mm" },
+    "description": {
+      "es": "Sistema de refrigeración líquida con radiador de 240mm y RGB.",
+      "en": "Liquid cooling system with 240mm radiator and RGB.",
+      "fr": "Système de refroidissement liquide avec radiateur 240mm et RGB."
+    },
+    "price": "$129.99",
+    "image": "/assets/liquid-cooling-240.png",
+    "category": "cooling",
+    "subcategory": "liquid"
+  },
+  {
+    "id": "16",
+    "name": { "es": "Ventilador RGB 120mm", "en": "120mm RGB Fan", "fr": "Ventilateur RGB 120mm" },
+    "description": {
+      "es": "Ventilador de 120mm con iluminación RGB y control PWM.",
+      "en": "120mm fan with RGB lighting and PWM control.",
+      "fr": "Ventilateur 120mm avec éclairage RGB et contrôle PWM."
+    },
+    "price": "$24.99",
+    "image": "/assets/fan-rgb-120.png",
+    "category": "cooling",
+    "subcategory": "fans"
+  },
+  {
+    "id": "17",
+    "name": { "es": "CPU Cooler Air", "en": "Air CPU Cooler", "fr": "Refroidisseur CPU Air" },
+    "description": {
+      "es": "Refrigerador de aire para CPU con doble torre y 6 heatpipes.",
+      "en": "Air cooler for CPU with dual tower and 6 heatpipes.",
+      "fr": "Refroidisseur air pour CPU avec double tour et 6 heatpipes."
+    },
+    "price": "$59.99",
+    "image": "/assets/cpu-cooler-air.png",
+    "category": "cooling",
+    "subcategory": "air"
+  },
+  {
+    "id": "18",
+    "name": { "es": "Teclado Mecánico RGB", "en": "RGB Mechanical Keyboard", "fr": "Clavier Mécanique RGB" },
+    "description": {
+      "es": "Teclado mecánico con retroiluminación RGB y switches azules.",
+      "en": "Mechanical keyboard with RGB backlight and blue switches.",
+      "fr": "Clavier mécanique avec rétroéclairage RGB et switches bleus."
+    },
+    "price": "$89.99",
+    "image": "/assets/teclado-rgb.png",
+    "category": "keyboard",
+    "subcategory": "mechanical"
+  },
+  {
+    "id": "19",
+    "name": { "es": "Teclado Óptico Gaming", "en": "Optical Gaming Keyboard", "fr": "Clavier Optique Gaming" },
+    "description": {
+      "es": "Teclado óptico gaming con switches ópticos y respuesta ultra rápida.",
+      "en": "Optical gaming keyboard with optical switches and ultra-fast response.",
+      "fr": "Clavier optique gaming avec switches optiques et réponse ultra-rapide."
+    },
+    "price": "$119.99",
+    "image": "/assets/teclado-optico.png",
+    "category": "keyboard",
+    "subcategory": "optical"
+  },
+  {
+    "id": "20",
+    "name": { "es": "Keycaps PBT", "en": "PBT Keycaps", "fr": "Keycaps PBT" },
+    "description": {
+      "es": "Set de keycaps PBT de alta calidad con diseño personalizado.",
+      "en": "High-quality PBT keycap set with custom design.",
+      "fr": "Set de keycaps PBT haute qualité avec design personnalisé."
+    },
+    "price": "$49.99",
+    "image": "/assets/keycaps-pbt.png",
+    "category": "keyboard",
+    "subcategory": "keycaps"
+  },
+  {
+    "id": "21",
+    "name": { "es": "Switches Mecánicos", "en": "Mechanical Switches", "fr": "Switches Mécaniques" },
+    "description": {
+      "es": "Set de switches mecánicos Cherry MX con diferentes tipos de actuación.",
+      "en": "Set of Cherry MX mechanical switches with different actuation types.",
+      "fr": "Set de switches mécaniques Cherry MX avec différents types d'actionnement."
+    },
+    "price": "$29.99",
+    "image": "/assets/switches-mx.png",
+    "category": "keyboard",
+    "subcategory": "switches"
+  },
+  {
+    "id": "22",
+    "name": { "es": "Mouse Gamer Pro", "en": "Pro Gaming Mouse", "fr": "Souris Gamer Pro" },
+    "description": {
+      "es": "Mouse ergonómico de alta precisión con 7 botones programables.",
+      "en": "High-precision ergonomic mouse with 7 programmable buttons.",
+      "fr": "Souris ergonomique haute précision avec 7 boutons programmables."
+    },
+    "price": "$49.99",
+    "image": "/assets/mouse-gamer-pro.png",
+    "category": "mouse",
+    "subcategory": "gaming"
+  },
+  {
+    "id": "23",
+    "name": { "es": "Mouse Inalámbrico", "en": "Wireless Mouse", "fr": "Souris Sans Fil" },
+    "description": {
+      "es": "Mouse inalámbrico con sensor óptico de alta precisión.",
+      "en": "Wireless mouse with high-precision optical sensor.",
+      "fr": "Souris sans fil avec capteur optique haute précision."
+    },
+    "price": "$39.99",
+    "image": "/assets/mouse-wireless.png",
+    "category": "mouse",
+    "subcategory": "wireless"
+  },
+  {
+    "id": "24",
+    "name": { "es": "Auriculares Gaming", "en": "Gaming Headset", "fr": "Casque Gaming" },
+    "description": {
+      "es": "Auriculares con micrófono integrado y sonido envolvente 7.1.",
+      "en": "Headset with integrated microphone and 7.1 surround sound.",
+      "fr": "Casque avec microphone intégré et son surround 7.1."
+    },
+    "price": "$79.99",
+    "image": "/assets/headset-gaming.png",
+    "category": "headset",
+    "subcategory": "gaming"
+  },
+  {
+    "id": "25",
+    "name": { "es": "Auriculares Studio", "en": "Studio Headphones", "fr": "Casque Studio" },
+    "description": {
+      "es": "Auriculares de estudio con sonido de referencia y cancelación de ruido.",
+      "en": "Studio headphones with reference sound and noise cancellation.",
+      "fr": "Casque studio avec son de référence et annulation de bruit."
+    },
+    "price": "$149.99",
+    "image": "/assets/headset-studio.png",
+    "category": "headset",
+    "subcategory": "studio"
+  },
+  {
+    "id": "26",
+    "name": { "es": "Micrófono USB", "en": "USB Microphone", "fr": "Microphone USB" },
+    "description": {
+      "es": "Micrófono USB de condensador con calidad de estudio.",
+      "en": "USB condenser microphone with studio quality.",
+      "fr": "Microphone USB à condensateur avec qualité studio."
+    },
+    "price": "$89.99",
+    "image": "/assets/microphone-usb.png",
+    "category": "microphone",
+    "subcategory": "usb"
+  },
+  {
+    "id": "27",
+    "name": { "es": "Micrófono XLR", "en": "XLR Microphone", "fr": "Microphone XLR" },
+    "description": {
+      "es": "Micrófono XLR profesional para streaming y grabación.",
+      "en": "Professional XLR microphone for streaming and recording.",
+      "fr": "Microphone XLR professionnel pour streaming et enregistrement."
+    },
+    "price": "$129.99",
+    "image": "/assets/microphone-xlr.png",
+    "category": "microphone",
+    "subcategory": "xlr"
+  },
+  {
+    "id": "28",
+    "name": { "es": "Webcam HD 1080p", "en": "HD 1080p Webcam", "fr": "Webcam HD 1080p" },
+    "description": {
+      "es": "Webcam de alta definición con micrófono integrado y autofocus.",
+      "en": "High-definition webcam with integrated microphone and autofocus.",
+      "fr": "Webcam haute définition avec microphone intégré et autofocus."
+    },
+    "price": "$59.99",
+    "image": "/assets/webcam-hd.png",
+    "category": "camera",
+    "subcategory": "webcam"
+  },
+  {
+    "id": "29",
+    "name": { "es": "Cámara 4K", "en": "4K Camera", "fr": "Caméra 4K" },
+    "description": {
+      "es": "Cámara 4K profesional para streaming y contenido.",
+      "en": "Professional 4K camera for streaming and content creation.",
+      "fr": "Caméra 4K professionnelle pour streaming et création de contenu."
+    },
+    "price": "$299.99",
+    "image": "/assets/camera-4k.png",
+    "category": "camera",
+    "subcategory": "4k"
+  },
+  {
+    "id": "30",
+    "name": { "es": "Kit de Luces RGB", "en": "RGB Light Kit", "fr": "Kit d'Éclairage RGB" },
+    "description": {
+      "es": "Kit completo de luces RGB para setup gaming y streaming.",
+      "en": "Complete RGB light kit for gaming and streaming setup.",
+      "fr": "Kit d'éclairage RGB complet pour setup gaming et streaming."
+    },
+    "price": "$79.99",
+    "image": "/assets/lights-rgb-kit.png",
+    "category": "lights",
+    "subcategory": "rgb"
+  },
+  {
+    "id": "31",
+    "name": { "es": "Tira LED RGB", "en": "RGB LED Strip", "fr": "Bande LED RGB" },
+    "description": {
+      "es": "Tira LED RGB de 2 metros con control remoto y efectos.",
+      "en": "2-meter RGB LED strip with remote control and effects.",
+      "fr": "Bande LED RGB de 2 mètres avec télécommande et effets."
+    },
+    "price": "$34.99",
+    "image": "/assets/led-strip-rgb.png",
+    "category": "lights",
+    "subcategory": "strips"
+  },
+  {
+    "id": "32",
+    "name": { "es": "Monitor Gaming 27\"", "en": "27\" Gaming Monitor", "fr": "Écran Gaming 27\"" },
+    "description": {
+      "es": "Monitor gaming con resolución 1440p, 165Hz y FreeSync.",
+      "en": "Gaming monitor with 1440p resolution, 165Hz and FreeSync.",
+      "fr": "Écran gaming avec résolution 1440p, 165Hz et FreeSync."
+    },
+    "price": "$299.99",
+    "image": "/assets/monitor-27.png",
+    "category": "monitor",
+    "subcategory": "gaming"
+  },
+  {
+    "id": "33",
+    "name": { "es": "Alfombrilla Gaming XL", "en": "XL Gaming Mousepad", "fr": "Tapis de Souris Gaming XL" },
+    "description": {
+      "es": "Alfombrilla extra grande con superficie de tela de alta calidad.",
+      "en": "Extra large mousepad with high-quality fabric surface.",
+      "fr": "Tapis de souris extra large avec surface en tissu de haute qualité."
+    },
+    "price": "$24.99",
+    "image": "/assets/mousepad-xl.png",
+    "category": "accessory",
+    "subcategory": "mousepad"
+  },
+  {
+    "id": "34",
+    "name": { "es": "Memoria RAM 32GB DDR5", "en": "32GB DDR5 RAM", "fr": "RAM 32GB DDR5" },
+    "description": {
+      "es": "Kit de memoria DDR5 de alta velocidad para gaming y trabajo.",
+      "en": "High-speed DDR5 memory kit for gaming and work.",
+      "fr": "Kit mémoire DDR5 haute vitesse pour gaming et travail."
+    },
+    "price": "$129.99",
+    "image": "/assets/ram-32gb.png",
+    "category": "ram",
+    "subcategory": "ddr5"
+  },
+  {
+    "id": "35",
+    "name": { "es": "Fuente de Poder 750W", "en": "750W Power Supply", "fr": "Alimentation 750W" },
+    "description": {
+      "es": "Fuente de poder modular 80 Plus Gold certificada.",
+      "en": "Modular 80 Plus Gold certified power supply.",
+      "fr": "Alimentation modulaire certifiée 80 Plus Gold."
+    },
+    "price": "$119.99",
+    "image": "/assets/psu-750w.png",
+    "category": "psu",
+    "subcategory": "modular"
+  },
+  {
+    "id": "36",
+    "name": { "es": "RTX 4080 - 15% OFF", "en": "RTX 4080 - 15% OFF", "fr": "RTX 4080 - 15% OFF" },
+    "description": {
+      "es": "Tarjeta gráfica RTX 4080 con descuento especial del 15%.",
+      "en": "RTX 4080 graphics card with special 15% discount.",
+      "fr": "Carte graphique RTX 4080 avec remise spéciale de 15%."
+    },
+    "price": "$849.99",
+    "originalPrice": "$999.99",
+    "image": "/assets/rtx-4080-offer.png",
+    "category": "graphics",
+    "subcategory": "nvidia",
+    "isOffer": true
+  },
+  {
+    "id": "37",
+    "name": { "es": "Kit Gaming Completo", "en": "Complete Gaming Kit", "fr": "Kit Gaming Complet" },
+    "description": {
+      "es": "Kit completo con teclado, mouse y headset gaming.",
+      "en": "Complete kit with gaming keyboard, mouse and headset.",
+      "fr": "Kit complet avec clavier, souris et casque gaming."
+    },
+    "price": "$199.99",
+    "originalPrice": "$249.99",
+    "image": "/assets/gaming-kit.png",
+    "category": "bundle",
+    "subcategory": "gaming",
+    "isOffer": true
+  },
+  {
+    "id": "38",
+    "name": {
+      "es": "Laptop Gaming Acer Nitro 5 AN515-58",
+      "en": "Acer Nitro 5 AN515-58 Gaming Laptop",
+      "fr": "Ordinateur Portable Gaming Acer Nitro 5 AN515-58"
+    },
+    "description": {
+      "es": "La Acer Nitro 5 AN515-58 es una laptop gamer de alto rendimiento diseñada para ofrecer la mejor experiencia de gaming. Equipada con el potente procesador Intel Core i7-12700H de 12ª generación con 14 núcleos (6 P-cores + 8 E-cores) y 20 hilos, esta laptop puede manejar cualquier tarea exigente con facilidad. La tarjeta gráfica NVIDIA GeForce RTX 3060 con 6GB de memoria GDDR6 proporciona un rendimiento excepcional para juegos AAA y aplicaciones de edición de video. La pantalla Full HD de 15.6 pulgadas con tasa de refresco de 144Hz y tiempo de respuesta de 3ms garantiza una experiencia visual fluida y sin lag. El teclado retroiluminado RGB con switches mecánicos ofrece una respuesta táctil precisa y personalizable. El sistema de refrigeración avanzado con doble ventilador y múltiples heatpipes mantiene temperaturas óptimas incluso durante sesiones de gaming prolongadas. Con 16GB de RAM DDR4 expandible hasta 32GB y un SSD NVMe de 1TB, disfrutarás de tiempos de carga ultrarrápidos y multitarea sin problemas. La batería de 57Wh proporciona hasta 8 horas de uso normal, mientras que los múltiples puertos incluyen USB-C, USB 3.2, HDMI 2.0, Ethernet y audio jack. Perfecta para gaming, streaming, edición de video y trabajo profesional.",
+      "en": "The Acer Nitro 5 AN515-58 is a high-performance gaming laptop designed to deliver the ultimate gaming experience. Powered by the powerful 12th generation Intel Core i7-12700H processor with 14 cores (6 P-cores + 8 E-cores) and 20 threads, this laptop can handle any demanding task with ease. The NVIDIA GeForce RTX 3060 graphics card with 6GB GDDR6 memory provides exceptional performance for AAA games and video editing applications. The 15.6-inch Full HD display with 144Hz refresh rate and 3ms response time ensures smooth, lag-free visual experience. The RGB backlit keyboard with mechanical switches offers precise tactile feedback and customization. The advanced cooling system with dual fans and multiple heatpipes maintains optimal temperatures even during extended gaming sessions. With 16GB DDR4 RAM expandable up to 32GB and a 1TB NVMe SSD, you'll enjoy ultra-fast loading times and seamless multitasking. The 57Wh battery provides up to 8 hours of normal usage, while multiple ports include USB-C, USB 3.2, HDMI 2.0, Ethernet, and audio jack. Perfect for gaming, streaming, video editing, and professional work.",
+      "fr": "L'Acer Nitro 5 AN515-58 est un ordinateur portable gaming haute performance conçu pour offrir l'expérience de jeu ultime. Alimenté par le puissant processeur Intel Core i7-12700H de 12e génération avec 14 cœurs (6 P-cores + 8 E-cores) et 20 threads, cet ordinateur portable peut gérer n'importe quelle tâche exigeante avec facilité. La carte graphique NVIDIA GeForce RTX 3060 avec 6GB de mémoire GDDR6 offre des performances exceptionnelles pour les jeux AAA et les applications d'édition vidéo. L'écran Full HD de 15,6 pouces avec un taux de rafraîchissement de 144Hz et un temps de réponse de 3ms garantit une expérience visuelle fluide sans lag. Le clavier rétroéclairé RGB avec switches mécaniques offre un retour tactile précis et personnalisable. Le système de refroidissement avancé avec double ventilateur et plusieurs heatpipes maintient des températures optimales même pendant les sessions de jeu prolongées. Avec 16GB de RAM DDR4 extensible jusqu'à 32GB et un SSD NVMe de 1TB, vous profiterez de temps de chargement ultra-rapides et d'un multitâche sans problème. La batterie de 57Wh fournit jusqu'à 8 heures d'utilisation normale, tandis que les multiples ports incluent USB-C, USB 3.2, HDMI 2.0, Ethernet et jack audio. Parfait pour le gaming, le streaming, l'édition vidéo et le travail professionnel."
+    },
+    "price": "$1,299.99",
+    "image": "/assets/laptop-acer-nitro-main.jpg",
+    "images": [
+      "/assets/laptop-acer-nitro-main.jpg",
+      "/assets/laptop-acer-nitro-side.jpg",
+      "/assets/laptop-acer-nitro-keyboard.jpg",
+      "/assets/laptop-acer-nitro-ports.jpg",
+      "/assets/laptop-acer-nitro-screen.jpg"
+    ],
+    "specs": {
+      "Procesador": "Intel Core i7-12700H (14 núcleos, 20 hilos)",
+      "Memoria RAM": "16GB DDR4-3200MHz (expandible hasta 32GB)",
+      "Almacenamiento": "1TB SSD NVMe PCIe 4.0",
+      "Gráficos": "NVIDIA GeForce RTX 3060 6GB GDDR6",
+      "Pantalla": "15.6\" Full HD (1920x1080) IPS, 144Hz, 3ms",
+      "Teclado": "Retroiluminado RGB con switches mecánicos",
+      "Audio": "DTS:X Ultra con altavoces duales",
+      "Red": "Wi-Fi 6 (802.11ax), Bluetooth 5.2, Ethernet Gigabit",
+      "Puertos": "1x USB-C, 3x USB 3.2, 1x HDMI 2.0, 1x Ethernet, 1x Audio",
+      "Batería": "57Wh, hasta 8 horas de uso",
+      "Dimensiones": "360.4 x 271.09 x 25.9 mm",
+      "Peso": "2.3kg",
+      "Sistema Operativo": "Windows 11 Home"
+    },
+    "category": "laptop",
+    "subcategory": "gaming",
+    "brand": "Acer",
+    "isNew": true,
+    "isPopular": true
+  }
+]
