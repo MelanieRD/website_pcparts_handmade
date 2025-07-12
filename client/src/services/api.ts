@@ -483,21 +483,54 @@ class ApiService {
 
   // Sales API
   async getAllSales(token: string): Promise<Sale[]> {
-    return this.request<Sale[]>("/api/admin/sales", {
+    const sales = await this.request<any[]>("/api/admin/sales", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
+
+    // Convert backend snake_case to frontend camelCase
+    return sales.map((sale) => ({
+      id: sale.id,
+      productId: sale.product_id,
+      productType: sale.product_type,
+      productName: sale.product_name,
+      quantity: sale.quantity,
+      unitPrice: sale.unit_price,
+      totalPrice: sale.total_price,
+      discount: sale.discount,
+      finalPrice: sale.final_price,
+      customerName: sale.customer_name,
+      customerEmail: sale.customer_email,
+      customerPhone: sale.customer_phone,
+      paymentMethod: sale.payment_method,
+      notes: sale.notes,
+      saleDate: sale.sale_date,
+      createdAt: sale.created_at,
+    }));
   }
 
   async createSale(sale: SaleRequest, token: string): Promise<Sale> {
+    // Convert frontend camelCase to backend snake_case
+    const saleToSend = {
+      product_id: sale.productId,
+      product_type: sale.productType,
+      quantity: sale.quantity,
+      discount: sale.discount,
+      customer_name: sale.customerName,
+      customer_email: sale.customerEmail,
+      customer_phone: sale.customerPhone,
+      payment_method: sale.paymentMethod,
+      notes: sale.notes,
+    };
+
     return this.request("/api/admin/sales", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(sale),
+      body: JSON.stringify(saleToSend),
     });
   }
 

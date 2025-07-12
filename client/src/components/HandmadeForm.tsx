@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import type { HandmadeProduct } from "../services/api";
 import ImageGalleryManager from "./ImageGalleryManager";
 import SpecificationsManager from "./SpecificationsManager";
+import ThumbnailUploader from "./ThumbnailUploader";
 import "./FormStyles.css";
 
 interface HandmadeFormProps {
@@ -238,30 +239,11 @@ const HandmadeForm: React.FC<HandmadeFormProps> = ({ handmade, isOpen, onClose, 
               </div>
             </div>
 
-            {/* Imagen Principal */}
-            <div className="form-row">
-              <div className="form-group">
-                <label className="form-label">Imagen Principal *</label>
-                <input
-                  className="form-input"
-                  type="url"
-                  value={formData.thumbnailImage}
-                  onChange={(e) => setFormData({ ...formData, thumbnailImage: e.target.value })}
-                  required
-                  placeholder="https://example.com/thumbnail.jpg"
-                />
-                {formData.thumbnailImage && (
-                  <div className="form-image-preview">
-                    <div className="form-image-item">
-                      <img src={formData.thumbnailImage} alt="Thumbnail" />
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
+            {/* Componente para subir imagen principal a Cloudinary */}
+            <ThumbnailUploader value={formData.thumbnailImage} onChange={(url) => setFormData({ ...formData, thumbnailImage: url })} required={true} />
 
             {/* Nuevo componente para gestión de galería de imágenes */}
-            <ImageGalleryManager images={formData.featureImages} onChange={(images) => setFormData({ ...formData, featureImages: images })} title="Galería de Imágenes del Producto Handmade" />
+            <ImageGalleryManager images={formData.featureImages} onChange={(images) => setFormData({ ...formData, featureImages: images })} />
 
             {/* Categorías */}
             <div className="form-row">

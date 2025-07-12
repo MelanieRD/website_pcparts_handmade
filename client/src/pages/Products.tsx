@@ -278,14 +278,14 @@ const Products: React.FC = () => {
                     description={product.description[lang] || product.description["es"]}
                     price={product.price}
                     originalPrice={product.originalPrice}
-                    image={product.image}
+                    image={product.thumbnailImage}
                     isOffer={product.isOffer}
                     onAddToCart={() =>
                       addToCart({
                         id: product.id,
                         name: product.name[lang] || product.name["es"],
                         price: parseFloat(product.price.replace(/[^0-9.]/g, "")),
-                        image: product.image,
+                        image: product.thumbnailImage,
                       })
                     }
                     onShowDetails={() => {
