@@ -5,18 +5,8 @@ import Navigation from "../components/Navigation";
 import Footer from "../components/Footer";
 import LoadingState from "../components/LoadingState";
 import BackButton from "../components/BackButton";
-
-interface Product {
-  id: string;
-  name: Record<string, string>;
-  description: Record<string, string>;
-  price: string;
-  originalPrice?: string;
-  image: string;
-  category: string;
-  subcategory: string;
-  isOffer?: boolean;
-}
+import type { Product } from "../services/api";
+import { apiService } from "../services/api";
 
 const Details: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -26,11 +16,21 @@ const Details: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    import("../data/products.json").then((mod) => {
-      const found = mod.default.find((p: Product) => p.id === id);
-      setProduct(found || null);
-      setLoading(false);
-    });
+    const loadProduct = async () => {
+      if (!id) return;
+      
+      try {
+        const result = await apiService.getProductById(id);
+        setProduct(result);
+      } catch (error) {
+        console.error("Error loading product:", error);
+        setProduct(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    loadProduct();
   }, [id]);
 
   if (i18nLoading || loading) {
@@ -53,7 +53,7 @@ const Details: React.FC = () => {
       <main style={{ maxWidth: 900, margin: "0 auto", padding: "2rem 1rem" }}>
         <BackButton onClick={() => navigate(-1)} />
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 32 }}>
-          <img src={product.image} alt={product.name[lang] || product.name["es"]} style={{ maxWidth: 320, borderRadius: 16, background: "#f8f9fa" }} />
+                          <img src={product.thumbnailImage} alt={product.name[lang] || product.name["es"]} style={{ maxWidth: 320, borderRadius: 16, background: "#f8f9fa" }} />
           <h1 style={{ fontSize: "2rem", fontWeight: 700 }}>{product.name[lang] || product.name["es"]}</h1>
           <p style={{ fontSize: "1.1rem", color: "#555", marginBottom: 16 }}>{product.description[lang] || product.description["es"]}</p>
           <div style={{ fontSize: "1.5rem", fontWeight: 600, color: "#667eea" }}>{product.price}</div>

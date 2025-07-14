@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Navigation from "../components/Navigation";
 import Button from "../components/Button";
 import { useI18n } from "../hooks/useI18n";
@@ -6,7 +6,7 @@ import Footer from "../components/Footer";
 
 const Home: React.FC = () => {
   const { t, loading } = useI18n();
-  const [search, setSearch] = useState("");
+  // const [search, setSearch] = useState("");
 
   if (loading) {
     return (

@@ -10,7 +10,7 @@ interface SalesModalProps {
   productType: "product" | "handmade" | "build";
 }
 
-const SalesModal: React.FC<SalesModalProps> = ({ isOpen, onClose, onSale, product, productType }) => {
+const SalesModal: React.FC<SalesModalProps> = ({ isOpen, onClose, onSale, product, productType: _ }) => {
   const [quantity, setQuantity] = useState(1);
   const [discount, setDiscount] = useState(0);
   const [customerName, setCustomerName] = useState("");

@@ -135,7 +135,7 @@ const Handmade: React.FC = () => {
                 }}
               >
                 <img
-                  src={product.image}
+                  src={product.thumbnailImage}
                   alt={product.name[lang] || product.name.es}
                   style={{
                     width: "100%",
@@ -245,7 +245,7 @@ const Handmade: React.FC = () => {
                         id: product.id,
                         name: product.name[lang] || product.name.es,
                         price: parseFloat(product.price.replace(/[^0-9.]/g, "")),
-                        image: product.image,
+                        image: product.thumbnailImage,
                       });
                     }}
                     style={{

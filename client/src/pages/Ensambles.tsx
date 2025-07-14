@@ -7,23 +7,7 @@ import HeroSection from "../components/HeroSection";
 import InfoSection from "../components/InfoSection";
 import LoadingState from "../components/LoadingState";
 import { useI18n } from "../hooks/useI18n";
-
-interface Build {
-  id: string;
-  name: Record<string, string>;
-  description: Record<string, string>;
-  longDescription: Record<string, string>;
-  price: string;
-  originalPrice?: string;
-  mainImage: string;
-  images: string[];
-  category: string;
-  specs: Record<string, string>;
-  features: string[];
-  isOffer?: boolean;
-  isNew?: boolean;
-  isPopular?: boolean;
-}
+import type { Build } from "../services/api";
 
 const Ensambles: React.FC = () => {
   const [builds, setBuilds] = useState<Build[]>([]);
@@ -54,8 +38,8 @@ const Ensambles: React.FC = () => {
         },
         price: "$2,999.99",
         originalPrice: "$3,299.99",
-        mainImage: "/assets/builds/pc-gaming-ultra-main.jpg",
-        images: [
+        thumbnailImage: "/assets/builds/pc-gaming-ultra-main.jpg",
+        featureImages: [
           "/assets/builds/pc-gaming-ultra-main.jpg",
           "/assets/builds/pc-gaming-ultra-side.jpg",
           "/assets/builds/pc-gaming-ultra-interior.jpg",
@@ -75,9 +59,9 @@ const Ensambles: React.FC = () => {
           Ventiladores: "6x Corsair LL120 RGB",
           "Sistema Operativo": "Windows 11 Pro",
         },
-        features: ["Rendimiento 4K Ultra", "Refrigeración líquida personalizada", "Iluminación RGB sincronizada", "Cableado personalizado", "Overclock optimizado", "Garantía extendida"],
+        subcategory: "high-end",
+        components: [],
         isOffer: true,
-        isPopular: true,
       },
       {
         id: "build2",
@@ -97,8 +81,8 @@ const Ensambles: React.FC = () => {
           fr: "Cette station de travail d'élite est conçue pour les professionnels qui nécessitent des performances maximales dans les tâches intensives. Le processeur AMD Ryzen 9 7950X avec 16 cœurs et 32 threads offre des performances exceptionnelles dans les applications de rendu, d'édition vidéo et de modélisation 3D. La carte graphique NVIDIA GeForce RTX 4090 avec 24GB de mémoire GDDR6X est la plus puissante disponible, idéale pour le rendu en temps réel et l'apprentissage automatique. Le système comprend 64GB de RAM DDR5 haute vitesse et plusieurs unités de stockage pour un flux de travail efficace.",
         },
         price: "$4,299.99",
-        mainImage: "/assets/builds/pc-workstation-elite-main.jpg",
-        images: [
+        thumbnailImage: "/assets/builds/pc-workstation-elite-main.jpg",
+        featureImages: [
           "/assets/builds/pc-workstation-elite-main.jpg",
           "/assets/builds/pc-workstation-elite-side.jpg",
           "/assets/builds/pc-workstation-elite-interior.jpg",
@@ -117,8 +101,8 @@ const Ensambles: React.FC = () => {
           Ventiladores: "5x Noctua NF-A12x25",
           "Sistema Operativo": "Windows 11 Pro",
         },
-        features: ["Rendimiento profesional", "Refrigeración optimizada", "Cableado profesional", "Configuración estable", "Soporte técnico premium", "Certificación ISV"],
-        isNew: true,
+        subcategory: "workstation",
+        components: [],
       },
       {
         id: "build3",
@@ -138,8 +122,8 @@ const Ensambles: React.FC = () => {
           fr: "Ce PC est spécialement conçu pour les streamers et créateurs de contenu qui doivent diffuser en haute qualité tout en jouant. Le système utilise une configuration double GPU où une carte gère le gaming et l'autre l'encodage du stream. Inclut une carte de capture intégrée pour une qualité vidéo maximale et une latence minimale. Le processeur AMD Ryzen 7 7800X3D avec technologie 3D V-Cache offre des performances de gaming exceptionnelles tout en gardant des ressources disponibles pour le streaming.",
         },
         price: "$2,199.99",
-        mainImage: "/assets/builds/pc-streaming-pro-main.jpg",
-        images: ["/assets/builds/pc-streaming-pro-main.jpg", "/assets/builds/pc-streaming-pro-side.jpg", "/assets/builds/pc-streaming-pro-interior.jpg"],
+        thumbnailImage: "/assets/builds/pc-streaming-pro-main.jpg",
+        featureImages: ["/assets/builds/pc-streaming-pro-main.jpg", "/assets/builds/pc-streaming-pro-side.jpg", "/assets/builds/pc-streaming-pro-interior.jpg"],
         category: "streaming",
         specs: {
           Procesador: "AMD Ryzen 7 7800X3D (8 núcleos, 16 hilos)",
@@ -154,8 +138,8 @@ const Ensambles: React.FC = () => {
           Case: "NZXT H7 Flow",
           "Sistema Operativo": "Windows 11 Home",
         },
-        features: ["Doble GPU para streaming", "Capturadora integrada", "Optimización para OBS", "Cableado organizado", "Iluminación RGB", "Configuración lista para stream"],
-        isPopular: true,
+        subcategory: "streaming",
+        components: [],
       },
     ];
 

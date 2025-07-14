@@ -118,7 +118,7 @@ const AdminPanel: React.FC = () => {
     }
   };
 
-  const handleSubmitBuild = async (data: Omit<Build, "id">) => {
+  const handleSubmitBuild = async (_data: Omit<Build, "id">) => {
     if (!token) return setError("No tienes permisos de administrador");
     try {
       // TODO: Implementar cuando esté disponible en el backend

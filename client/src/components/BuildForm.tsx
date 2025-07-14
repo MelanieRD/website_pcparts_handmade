@@ -119,11 +119,11 @@ const BuildForm: React.FC<BuildFormProps> = ({ build, isOpen, onClose, onSubmit,
     });
   };
 
-  const updateComponent = (index: number, field: keyof BuildComponent, value: any) => {
-    const updatedComponents = [...formData.components];
-    updatedComponents[index] = { ...updatedComponents[index], [field]: value };
-    setFormData({ ...formData, components: updatedComponents });
-  };
+  // const updateComponent = (index: number, field: keyof BuildComponent, value: any) => {
+  //   const updatedComponents = [...formData.components];
+  //   updatedComponents[index] = { ...updatedComponents[index], [field]: value };
+  //   setFormData({ ...formData, components: updatedComponents });
+  // };
 
   if (!isOpen) return null;
 
@@ -292,7 +292,7 @@ const BuildForm: React.FC<BuildFormProps> = ({ build, isOpen, onClose, onSubmit,
             </div>
 
             {/* Galería de imágenes */}
-            <ImageGalleryManager images={formData.featureImages} onChange={(images) => setFormData({ ...formData, featureImages: images })} title="Galería de Imágenes del Build" />
+            <ImageGalleryManager images={formData.featureImages} onChange={(images) => setFormData({ ...formData, featureImages: images })} />
 
             {/* Categorías */}
             <div className="form-row">
