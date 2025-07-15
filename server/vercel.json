@@ -4,10 +4,10 @@
       "runtime": "vercel-rust@1.0.0"
     }
   },
-  "routes": [
+  "rewrites": [
     {
-      "src": "/api/(.*)",
-      "dest": "/api/index.rs"
+      "source": "/api/(.*)",
+      "destination": "/api/index.rs"
     }
   ],
   "headers": [
