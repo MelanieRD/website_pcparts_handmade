@@ -1,258 +1,411 @@
-import React, { useState, useEffect } from "react";
-import type { Product } from "../services/api";
-import ImageGalleryManager from "./ImageGalleryManager";
-import SpecificationsManager from "./SpecificationsManager";
-import ThumbnailUploader from "./ThumbnailUploader";
-import "./FormStyles.css";
+import React, { useState, useEffect } from 'react';
+import { X, Upload } from 'lucide-react';
+import { Product } from '../types/Product';
+import { computerCategories, handmadeCategories } from '../data/products';
 
 interface ProductFormProps {
-  product?: Product | null;
+  product: Product | null;
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (product: Omit<Product, "id">) => Promise<void>;
-  mode: "add" | "edit";
+  onSave: (product: Omit<Product, 'id'>) => void;
 }
 
-const ProductForm: React.FC<ProductFormProps> = ({ product, isOpen, onClose, onSubmit, mode }) => {
+export default function ProductForm({ product, isOpen, onClose, onSave }: ProductFormProps) {
   const [formData, setFormData] = useState({
-    name: { es: "", en: "", fr: "" },
-    description: { es: "", en: "", fr: "" },
-    price: "",
-    originalPrice: "",
-    stock: 0,
-    acquisitionDate: "",
-    thumbnailImage: "",
-    featureImages: [] as string[],
-    category: "",
-    subcategory: "",
-    brand: "",
-    isNew: false,
-    isPopular: false,
-    isOffer: false,
-    specs: {} as Record<string, string>,
+    name: '',
+    price: 0,
+    image: '',
+    images: [''],
+    category: 'computer' as 'computer' | 'handmade',
+    subcategory: '',
+    description: '',
+    fullDescription: '',
+    specifications: {} as Record<string, string>,
+    inStock: true,
+    rating: 4.5,
+    reviews: 0,
+    brand: '',
+    model: ''
   });
-  const [error, setError] = useState("");
+
+  const [specKey, setSpecKey] = useState('');
+  const [specValue, setSpecValue] = useState('');
 
   useEffect(() => {
-    if (product && mode === "edit") {
+    if (product) {
       setFormData({
-        name: {
-          es: product.name.es || "",
-          en: product.name.en || "",
-          fr: product.name.fr || "",
-        },
-        description: {
-          es: product.description.es || "",
-          en: product.description.en || "",
-          fr: product.description.fr || "",
-        },
+        name: product.name,
         price: product.price,
-        originalPrice: product.originalPrice || "",
-        stock: product.stock || 0,
-        acquisitionDate: product.acquisitionDate || "",
-        thumbnailImage: product.thumbnailImage || "",
-        featureImages: product.featureImages || [],
+        image: product.image,
+        images: product.images,
         category: product.category,
         subcategory: product.subcategory,
-        brand: product.brand || "",
-        isNew: product.isNew || false,
-        isPopular: product.isPopular || false,
-        isOffer: product.isOffer || false,
-        specs: product.specs || {},
+        description: product.description,
+        fullDescription: product.fullDescription,
+        specifications: product.specifications || {},
+        inStock: product.inStock,
+        rating: product.rating,
+        reviews: product.reviews,
+        brand: product.brand || '',
+        model: product.model || ''
       });
     } else {
       setFormData({
-        name: { es: "", en: "", fr: "" },
-        description: { es: "", en: "", fr: "" },
-        price: "",
-        originalPrice: "",
-        stock: 0,
-        acquisitionDate: "",
-        thumbnailImage: "",
-        featureImages: [],
-        category: "",
-        subcategory: "",
-        brand: "",
-        isNew: false,
-        isPopular: false,
-        isOffer: false,
-        specs: {},
+        name: '',
+        price: 0,
+        image: '',
+        images: [''],
+        category: 'computer',
+        subcategory: '',
+        description: '',
+        fullDescription: '',
+        specifications: {},
+        inStock: true,
+        rating: 4.5,
+        reviews: 0,
+        brand: '',
+        model: ''
       });
     }
-  }, [product, mode, isOpen]);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
-    try {
-      await onSubmit(formData);
-      onClose();
-    } catch (err) {
-      setError("Error al guardar el producto. Inténtalo de nuevo.");
-    }
-  };
+  }, [product]);
 
   if (!isOpen) return null;
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSave({
+      ...formData,
+      images: formData.images.filter(img => img.trim() !== '')
+    });
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value, type } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'number' ? parseFloat(value) || 0 : 
+              type === 'checkbox' ? (e.target as HTMLInputElement).checked : value
+    }));
+  };
+
+  const addSpecification = () => {
+    if (specKey && specValue) {
+      setFormData(prev => ({
+        ...prev,
+        specifications: {
+          ...prev.specifications,
+          [specKey]: specValue
+        }
+      }));
+      setSpecKey('');
+      setSpecValue('');
+    }
+  };
+
+  const removeSpecification = (key: string) => {
+    setFormData(prev => ({
+      ...prev,
+      specifications: Object.fromEntries(
+        Object.entries(prev.specifications).filter(([k]) => k !== key)
+      )
+    }));
+  };
+
+  const addImageField = () => {
+    setFormData(prev => ({
+      ...prev,
+      images: [...prev.images, '']
+    }));
+  };
+
+  const updateImage = (index: number, value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      images: prev.images.map((img, i) => i === index ? value : img)
+    }));
+  };
+
+  const removeImage = (index: number) => {
+    setFormData(prev => ({
+      ...prev,
+      images: prev.images.filter((_, i) => i !== index)
+    }));
+  };
+
+  const availableSubcategories = formData.category === 'computer' ? computerCategories : handmadeCategories;
+
   return (
-    <div className="form-modal-bg">
-      <div className="form-container">
-        <div className="form-header">
-          <h2 className="form-title">{mode === "add" ? "➕ Agregar Producto" : "✏️ Editar Producto"}</h2>
-          <button className="form-close-btn" onClick={onClose}>
-            ✕
-          </button>
-        </div>
+    <div className="fixed inset-0 z-50 overflow-hidden">
+      <div className="absolute inset-0 bg-black bg-opacity-50" onClick={onClose} />
+      <div className="absolute inset-0 flex items-center justify-center p-4">
+        <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+          <div className="sticky top-0 bg-white border-b border-gray-200 p-6 flex items-center justify-between rounded-t-2xl">
+            <h2 className="text-2xl font-bold text-gray-800">
+              {product ? 'Editar Producto' : 'Agregar Producto'}
+            </h2>
+            <button
+              onClick={onClose}
+              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+            >
+              <X className="h-6 w-6" />
+            </button>
+          </div>
 
-        <div className="form-body">
-          <form onSubmit={handleSubmit}>
-            {error && <div className="form-error">{error}</div>}
+          <form onSubmit={handleSubmit} className="p-6 space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Basic Info */}
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Nombre del Producto
+                  </label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    required
+                  />
+                </div>
 
-            <div className="form-row">
-              <div className="form-group">
-                <label className="form-label">Nombre (Español) *</label>
-                <input
-                  className="form-input"
-                  type="text"
-                  value={formData.name.es}
-                  onChange={(e) => setFormData({ ...formData, name: { ...formData.name, es: e.target.value } })}
-                  required
-                  placeholder="Ej: Laptop Gaming Pro"
-                />
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Precio
+                  </label>
+                  <input
+                    type="number"
+                    name="price"
+                    value={formData.price}
+                    onChange={handleInputChange}
+                    step="0.01"
+                    min="0"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Categoría
+                  </label>
+                  <select
+                    name="category"
+                    value={formData.category}
+                    onChange={handleInputChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  >
+                    <option value="computer">Componentes PC</option>
+                    <option value="handmade">Artesanales</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Subcategoría
+                  </label>
+                  <select
+                    name="subcategory"
+                    value={formData.subcategory}
+                    onChange={handleInputChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    required
+                  >
+                    <option value="">Seleccionar subcategoría</option>
+                    {availableSubcategories.map((sub: string) => (
+                      <option key={sub} value={sub}>{sub}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Marca
+                  </label>
+                  <input
+                    type="text"
+                    name="brand"
+                    value={formData.brand}
+                    onChange={handleInputChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Modelo
+                  </label>
+                  <input
+                    type="text"
+                    name="model"
+                    value={formData.model}
+                    onChange={handleInputChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
+
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    name="inStock"
+                    checked={formData.inStock}
+                    onChange={handleInputChange}
+                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                  />
+                  <label className="ml-2 block text-sm text-gray-700">
+                    En Stock
+                  </label>
+                </div>
               </div>
-              <div className="form-group">
-                <label className="form-label">Nombre (English) *</label>
-                <input
-                  className="form-input"
-                  type="text"
-                  value={formData.name.en}
-                  onChange={(e) => setFormData({ ...formData, name: { ...formData.name, en: e.target.value } })}
-                  required
-                  placeholder="Ex: Gaming Laptop Pro"
-                />
-              </div>
-              <div className="form-group">
-                <label className="form-label">Nombre (Français) *</label>
-                <input
-                  className="form-input"
-                  type="text"
-                  value={formData.name.fr}
-                  onChange={(e) => setFormData({ ...formData, name: { ...formData.name, fr: e.target.value } })}
-                  required
-                  placeholder="Ex: Ordinateur Gaming Pro"
-                />
+
+              {/* Images */}
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Imagen Principal
+                  </label>
+                  <input
+                    type="url"
+                    name="image"
+                    value={formData.image}
+                    onChange={handleInputChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="https://example.com/image.jpg"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Imágenes Adicionales
+                  </label>
+                  {formData.images.map((image, index) => (
+                    <div key={index} className="flex space-x-2 mb-2">
+                      <input
+                        type="url"
+                        value={image}
+                        onChange={(e) => updateImage(index, e.target.value)}
+                        className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="https://example.com/image.jpg"
+                      />
+                      {formData.images.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => removeImage(index)}
+                          className="px-3 py-2 text-red-600 hover:bg-red-50 rounded-lg"
+                        >
+                          <X className="h-4 w-4" />
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={addImageField}
+                    className="text-blue-600 hover:text-blue-700 text-sm flex items-center space-x-1"
+                  >
+                    <Upload className="h-4 w-4" />
+                    <span>Agregar imagen</span>
+                  </button>
+                </div>
               </div>
             </div>
 
-            <div className="form-row">
-              <div className="form-group">
-                <label className="form-label">Descripción (Español) *</label>
-                <textarea
-                  className="form-input form-textarea"
-                  value={formData.description.es}
-                  onChange={(e) => setFormData({ ...formData, description: { ...formData.description, es: e.target.value } })}
-                  required
-                  placeholder="Descripción detallada del producto en español"
-                />
-              </div>
-              <div className="form-group">
-                <label className="form-label">Descripción (English) *</label>
-                <textarea
-                  className="form-input form-textarea"
-                  value={formData.description.en}
-                  onChange={(e) => setFormData({ ...formData, description: { ...formData.description, en: e.target.value } })}
-                  required
-                  placeholder="Detailed product description in English"
-                />
-              </div>
-              <div className="form-group">
-                <label className="form-label">Descripción (Français) *</label>
-                <textarea
-                  className="form-input form-textarea"
-                  value={formData.description.fr}
-                  onChange={(e) => setFormData({ ...formData, description: { ...formData.description, fr: e.target.value } })}
-                  required
-                  placeholder="Description détaillée du produit en français"
-                />
-              </div>
-            </div>
-
-            <div className="form-row">
-              <div className="form-group">
-                <label className="form-label">Precio de Venta *</label>
-                <input className="form-input" type="text" value={formData.price} onChange={(e) => setFormData({ ...formData, price: e.target.value })} required placeholder="299.99" />
-              </div>
-              <div className="form-group">
-                <label className="form-label">Precio Base</label>
-                <input className="form-input" type="text" value={formData.originalPrice} onChange={(e) => setFormData({ ...formData, originalPrice: e.target.value })} placeholder="399.99" />
-              </div>
-              <div className="form-group">
-                <label className="form-label">Cantidad en Stock *</label>
-                <input className="form-input" type="number" min="0" value={formData.stock} onChange={(e) => setFormData({ ...formData, stock: Number(e.target.value) })} required placeholder="10" />
-              </div>
-              <div className="form-group">
-                <label className="form-label">Fecha de Adquisición</label>
-                <input className="form-input" type="date" value={formData.acquisitionDate} onChange={(e) => setFormData({ ...formData, acquisitionDate: e.target.value })} />
-              </div>
-            </div>
-
-            {/* Componente para subir imagen principal a Cloudinary */}
-            <ThumbnailUploader value={formData.thumbnailImage} onChange={(url) => setFormData({ ...formData, thumbnailImage: url })} required={true} />
-
-            {/* Nuevo componente para gestión de galería de imágenes */}
-            <ImageGalleryManager images={formData.featureImages} onChange={(images) => setFormData({ ...formData, featureImages: images })} />
-
-            <div className="form-row">
-              <div className="form-group">
-                <label className="form-label">Categoría *</label>
-                <input className="form-input" type="text" value={formData.category} onChange={(e) => setFormData({ ...formData, category: e.target.value })} required placeholder="Ej: laptops" />
-              </div>
-              <div className="form-group">
-                <label className="form-label">Subcategoría *</label>
-                <input className="form-input" type="text" value={formData.subcategory} onChange={(e) => setFormData({ ...formData, subcategory: e.target.value })} required placeholder="Ej: gaming" />
-              </div>
-              <div className="form-group">
-                <label className="form-label">Marca</label>
-                <input className="form-input" type="text" value={formData.brand} onChange={(e) => setFormData({ ...formData, brand: e.target.value })} placeholder="Ej: Acer" />
-              </div>
-            </div>
-
-            {/* Nuevo componente para gestión de especificaciones */}
-            <SpecificationsManager specs={formData.specs} onChange={(specs) => setFormData({ ...formData, specs })} title="Especificaciones del Producto" />
-
-            <div className="form-row">
-              <div className="form-group">
-                <label className="form-label">
-                  <input type="checkbox" checked={formData.isNew} onChange={(e) => setFormData({ ...formData, isNew: e.target.checked })} />
-                  🆕 Nuevo
+            {/* Descriptions */}
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Descripción Corta
                 </label>
+                <textarea
+                  name="description"
+                  value={formData.description}
+                  onChange={handleInputChange}
+                  rows={2}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  required
+                />
               </div>
-              <div className="form-group">
-                <label className="form-label">
-                  <input type="checkbox" checked={formData.isPopular} onChange={(e) => setFormData({ ...formData, isPopular: e.target.checked })} />⭐ Popular
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Descripción Completa
                 </label>
+                <textarea
+                  name="fullDescription"
+                  value={formData.fullDescription}
+                  onChange={handleInputChange}
+                  rows={4}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  required
+                />
               </div>
-              <div className="form-group">
-                <label className="form-label">
-                  <input type="checkbox" checked={formData.isOffer} onChange={(e) => setFormData({ ...formData, isOffer: e.target.checked })} />
-                  🏷️ Oferta
-                </label>
+            </div>
+
+            {/* Specifications */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Especificaciones
+              </label>
+              <div className="space-y-2">
+                {Object.entries(formData.specifications).map(([key, value]) => (
+                  <div key={key} className="flex items-center space-x-2 p-2 bg-gray-50 rounded-lg">
+                    <span className="font-medium">{key}:</span>
+                    <span>{value}</span>
+                    <button
+                      type="button"
+                      onClick={() => removeSpecification(key)}
+                      className="text-red-600 hover:text-red-700"
+                    >
+                      <X className="h-4 w-4" />
+                    </button>
+                  </div>
+                ))}
+                <div className="flex space-x-2">
+                  <input
+                    type="text"
+                    value={specKey}
+                    onChange={(e) => setSpecKey(e.target.value)}
+                    placeholder="Especificación"
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                  <input
+                    type="text"
+                    value={specValue}
+                    onChange={(e) => setSpecValue(e.target.value)}
+                    placeholder="Valor"
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                  <button
+                    type="button"
+                    onClick={addSpecification}
+                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                  >
+                    Agregar
+                  </button>
+                </div>
               </div>
+            </div>
+
+            {/* Submit Buttons */}
+            <div className="flex space-x-4 pt-6 border-t border-gray-200">
+              <button
+                type="button"
+                onClick={onClose}
+                className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+              >
+                Cancelar
+              </button>
+              <button
+                type="submit"
+                className="flex-1 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                {product ? 'Actualizar' : 'Crear'} Producto
+              </button>
             </div>
           </form>
-        </div>
-
-        <div className="form-btn-container">
-          <button className="form-btn form-btn-cancel" type="button" onClick={onClose}>
-            ❌ Cancelar
-          </button>
-          <button className="form-btn" type="button" onClick={handleSubmit}>
-            {mode === "add" ? "✅ Agregar Producto" : "💾 Guardar Cambios"}
-          </button>
         </div>
       </div>
     </div>
   );
-};
-
-export default ProductForm;
+}

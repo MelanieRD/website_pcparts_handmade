@@ -1,73 +1,82 @@
-import React from "react";
-import { useDesignSystem } from "../hooks/useDesignSystem";
-import { useI18n } from "../hooks/useI18n";
-import { useAuth } from "../contexts/AuthContext";
-import FooterLogin from "./FooterLogin";
+import React from 'react';
+import { Monitor, Mail, Phone, MapPin, Facebook, Twitter, Instagram, Youtube } from 'lucide-react';
 
-const Footer: React.FC = () => {
-  const { getColor, getTypography, getSpacing } = useDesignSystem();
-  const { t } = useI18n();
-  const { user, isAdmin, logout } = useAuth();
-
+export default function Footer() {
   return (
-    <>
-      <footer
-        style={{
-          backgroundColor: getColor("secondary.800"),
-          color: getColor("white"),
-          padding: `${getSpacing("2xl")} 0`,
-          textAlign: "center",
-        }}
-      >
-        <div style={{ maxWidth: "1200px", margin: "0 auto", padding: `0 ${getSpacing("lg")}` }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "1rem" }}>
-            <p
-              style={{
-                fontSize: getTypography("fontSize", "base"),
-                color: getColor("secondary.300"),
-              }}
-            >
-              {t("footer.copyright")}
+    <footer className="bg-gray-900 text-white">
+      <div className="container mx-auto px-4 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          {/* Brand */}
+          <div>
+            <div className="flex items-center space-x-2 mb-4">
+              <Monitor className="h-8 w-8 text-blue-400" />
+              <h3 className="text-2xl font-bold">
+                Cyborg<span className="text-blue-400">Tech</span>
+              </h3>
+            </div>
+            <p className="text-gray-400 mb-4">
+              Tu destino para componentes de computadora de última generación y productos artesanales únicos.
             </p>
+            <div className="flex space-x-4">
+              <Facebook className="h-5 w-5 text-gray-400 hover:text-blue-400 cursor-pointer transition-colors" />
+              <Twitter className="h-5 w-5 text-gray-400 hover:text-blue-400 cursor-pointer transition-colors" />
+              <Instagram className="h-5 w-5 text-gray-400 hover:text-pink-400 cursor-pointer transition-colors" />
+              <Youtube className="h-5 w-5 text-gray-400 hover:text-red-400 cursor-pointer transition-colors" />
+            </div>
+          </div>
 
-            <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
-              {user ? (
-                <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-                  <span style={{ fontSize: getTypography("fontSize", "sm"), color: getColor("secondary.300") }}>Hola, {user.name}</span>
-                  {isAdmin && (
-                    <a
-                      href="/admin"
-                      style={{
-                        fontSize: getTypography("fontSize", "sm"),
-                        color: getColor("accent.400"),
-                        textDecoration: "none",
-                      }}
-                    >
-                      Panel Admin
-                    </a>
-                  )}
-                  <button
-                    onClick={logout}
-                    style={{
-                      fontSize: getTypography("fontSize", "sm"),
-                      color: getColor("accent.400"),
-                      background: "none",
-                      border: "none",
-                      cursor: "pointer",
-                    }}
-                  >
-                    Cerrar Sesión
-                  </button>
-                </div>
-              ) : (
-                <FooterLogin />
-              )}
+          {/* Products */}
+          <div>
+            <h4 className="text-lg font-semibold mb-4">Productos</h4>
+            <ul className="space-y-2">
+              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Procesadores</a></li>
+              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Tarjetas Gráficas</a></li>
+              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Memoria RAM</a></li>
+              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Almacenamiento</a></li>
+              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Productos Artesanales</a></li>
+            </ul>
+          </div>
+
+          {/* Support */}
+          <div>
+            <h4 className="text-lg font-semibold mb-4">Soporte</h4>
+            <ul className="space-y-2">
+              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Centro de Ayuda</a></li>
+              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Garantías</a></li>
+              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Devoluciones</a></li>
+              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Envíos</a></li>
+              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">FAQ</a></li>
+            </ul>
+          </div>
+
+          {/* Contact */}
+          <div>
+            <h4 className="text-lg font-semibold mb-4">Contacto</h4>
+            <div className="space-y-3">
+              <div className="flex items-center space-x-3">
+                <Phone className="h-5 w-5 text-blue-400" />
+                <span className="text-gray-400">+1 (555) 123-4567</span>
+              </div>
+              <div className="flex items-center space-x-3">
+                <Mail className="h-5 w-5 text-blue-400" />
+                <span className="text-gray-400">info@techcraft.com</span>
+              </div>
+              <div className="flex items-center space-x-3">
+                <MapPin className="h-5 w-5 text-blue-400" />
+                <span className="text-gray-400">123 Tech Street, City</span>
+              </div>
             </div>
           </div>
         </div>
-      </footer>
-    </>
-  );
-};
 
-export default Footer;
+        <div className="border-t border-gray-800 mt-8 pt-8 text-center">
+          <p className="text-gray-400">
+            © 2025 TechCraft Store. Todos los derechos reservados. | 
+            <a href="#" className="hover:text-white transition-colors ml-1">Política de Privacidad</a> | 
+            <a href="#" className="hover:text-white transition-colors ml-1">Términos de Servicio</a>
+          </p>
+        </div>
+      </div>
+    </footer>
+  );
+}

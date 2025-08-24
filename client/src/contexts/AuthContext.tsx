@@ -1,128 +1,103 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
-import type { ReactNode } from "react";
-import { apiService } from "../services/api";
+import React, { createContext, useContext, useState, ReactNode } from 'react';
+import { User, AuthState } from '../types/User';
 
-export interface User {
-  id: string;
-  email: string;
-  name: string;
-  role: string;
-}
-
-interface AuthContextType {
-  user: User | null;
-  token: string | null;
+interface AuthContextType extends AuthState {
   login: (email: string, password: string) => Promise<boolean>;
-  register: (email: string, password: string, name: string) => Promise<boolean>;
   logout: () => void;
-  loading: boolean;
-  isAdmin: boolean;
+  register: (email: string, password: string, name: string) => Promise<boolean>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider");
+// Mock users for demo
+const mockUsers: User[] = [
+  {
+    id: '1',
+    email: 'admin@cyborgtech.com',
+    name: 'Admin User',
+    role: 'admin'
+  },
+  {
+    id: '2',
+    email: 'user@example.com',
+    name: 'John Doe',
+    role: 'customer'
   }
-  return context;
-};
+];
 
-interface AuthProviderProps {
-  children: ReactNode;
-}
-
-export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [token, setToken] = useState<string | null>(localStorage.getItem("token"));
-  const [loading, setLoading] = useState(true);
-
-  const isAdmin = user?.role === "admin";
-
-  useEffect(() => {
-    const initializeAuth = async () => {
-      console.log("AuthContext - Initializing auth, token from localStorage:", token);
-      if (token) {
-        try {
-          // Verify token by getting current user
-          console.log("AuthContext - Verifying token:", token);
-          const currentUser = await apiService.getCurrentUser(token);
-          console.log("AuthContext - Current user:", currentUser);
-          setUser(currentUser);
-        } catch (error) {
-          console.error("Token validation failed:", error);
-          // Try to refresh the token if it's expired
-          try {
-            console.log("AuthContext - Attempting to refresh token");
-            const refreshResponse = await apiService.refreshToken(token);
-            setUser(refreshResponse.user);
-            setToken(refreshResponse.token);
-            localStorage.setItem("token", refreshResponse.token);
-            console.log("AuthContext - Token refreshed successfully");
-          } catch (refreshError) {
-            console.error("Token refresh failed:", refreshError);
-            localStorage.removeItem("token");
-            setToken(null);
-            setUser(null);
-          }
-        }
-      }
-      setLoading(false);
-    };
-
-    initializeAuth();
-  }, [token]);
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [authState, setAuthState] = useState<AuthState>({
+    user: null,
+    isAuthenticated: false,
+    isLoading: false
+  });
 
   const login = async (email: string, password: string): Promise<boolean> => {
-    try {
-      setLoading(true);
-      const response = await apiService.login(email, password);
-      console.log("AuthContext - Login response:", response);
-      setUser(response.user);
-      setToken(response.token);
-      localStorage.setItem("token", response.token);
-      console.log("AuthContext - Token saved to localStorage:", response.token);
+    setAuthState(prev => ({ ...prev, isLoading: true }));
+    
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    const user = mockUsers.find(u => u.email === email);
+    if (user && password === 'password') {
+      setAuthState({
+        user,
+        isAuthenticated: true,
+        isLoading: false
+      });
       return true;
-    } catch (error) {
-      console.error("Login failed:", error);
-      return false;
-    } finally {
-      setLoading(false);
     }
+    
+    setAuthState(prev => ({ ...prev, isLoading: false }));
+    return false;
   };
 
-  const register = async (email: string, password: string, name: string): Promise<boolean> => {
-    try {
-      setLoading(true);
-      const response = await apiService.register(email, password, name);
-      setUser(response.user);
-      setToken(response.token);
-      localStorage.setItem("token", response.token);
-      return true;
-    } catch (error) {
-      console.error("Registration failed:", error);
-      return false;
-    } finally {
-      setLoading(false);
-    }
+  const register = async (email: string, _password: string, name: string): Promise<boolean> => {
+    setAuthState(prev => ({ ...prev, isLoading: true }));
+    
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    const newUser: User = {
+      id: Date.now().toString(),
+      email,
+      name,
+      role: 'customer'
+    };
+    
+    setAuthState({
+      user: newUser,
+      isAuthenticated: true,
+      isLoading: false
+    });
+    
+    return true;
   };
 
   const logout = () => {
-    setUser(null);
-    setToken(null);
-    localStorage.removeItem("token");
+    setAuthState({
+      user: null,
+      isAuthenticated: false,
+      isLoading: false
+    });
   };
 
-  const value: AuthContextType = {
-    user,
-    token,
-    login,
-    register,
-    logout,
-    loading,
-    isAdmin,
-  };
+  return (
+    <AuthContext.Provider value={{
+      ...authState,
+      login,
+      logout,
+      register
+    }}>
+      {children}
+    </AuthContext.Provider>
+  );
+}
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-};
+export function useAuth() {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+}

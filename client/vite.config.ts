@@ -1,15 +1,32 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 
-// https://vite.dev/config/
+// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  build: {
-    outDir: "dist",
-    sourcemap: false,
-  },
   server: {
-    port: 3000,
-    host: true,
+    port: 5173,
+    host: 'localhost',
+    strictPort: false,
+    open: false,
+    cors: true,
+    hmr: {
+      port: 5174,
+      clientPort: 5174,
+    },
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET,HEAD,PUT,PATCH,POST,DELETE',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With',
+      'Cache-Control': 'no-cache',
+    }
+  },
+  optimizeDeps: {
+    include: ['react', 'react-dom'],
+    exclude: [],
+  },
+  build: {
+    sourcemap: false,
+    minify: false,
   },
 });

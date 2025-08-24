@@ -1,214 +1,125 @@
-import React from "react";
+import React from 'react';
+import { Star, ShoppingCart, Heart, Package, Eye } from 'lucide-react';
+import { Product } from '../types/Product';
 
 interface ProductCardProps {
-  name: string;
-  description: string;
-  price: string;
-  originalPrice?: string;
-  image: string;
-  isOffer?: boolean;
-  onAddToCart?: () => void;
-  onShowDetails?: () => void;
+  product: Product;
+  onAddToCart: (product: Product) => void;
+  onViewDetails: (product: Product) => void;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ name, description, price, originalPrice, image, isOffer, onAddToCart, onShowDetails }) => {
+export default function ProductCard({ product, onAddToCart, onViewDetails }: ProductCardProps) {
+  const renderStars = (rating: number) => {
+    return Array.from({ length: 5 }).map((_, i) => (
+      <Star
+        key={i}
+        className={`h-4 w-4 ${
+          i < Math.floor(rating) 
+            ? 'text-accent-400 fill-current' 
+            : 'text-gray-300'
+        }`}
+      />
+    ));
+  };
+
+  const categoryColor = product.category === 'computer' 
+    ? 'bg-secondary-100 text-secondary-800' 
+    : 'bg-primary-100 text-primary-800';
+
   return (
-    <div
-      style={{
-        backgroundColor: "white",
-        borderRadius: "16px",
-        padding: "1.5rem",
-        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08)",
-        border: "1px solid #f1f5f9",
-        display: "flex",
-        flexDirection: "column",
-        height: "100%",
-        transition: "all 0.3s ease",
-        cursor: "pointer",
-        position: "relative",
-        overflow: "hidden",
-      }}
-      onClick={onShowDetails}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.transform = "translateY(-4px)";
-        e.currentTarget.style.boxShadow = "0 20px 25px rgba(0, 0, 0, 0.15), 0 10px 10px rgba(0, 0, 0, 0.1)";
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.transform = "translateY(0)";
-        e.currentTarget.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08)";
-      }}
-    >
-      {/* Image Container */}
-      <div
-        style={{
-          position: "relative",
-          marginBottom: "1rem",
-          borderRadius: "12px",
-          overflow: "hidden",
-          aspectRatio: "1",
-          backgroundColor: "#f8f9fa",
-        }}
-      >
-        {/* Offer Badge */}
-        {isOffer && (
-          <div
-            style={{
-              position: "absolute",
-              top: "10px",
-              right: "10px",
-              backgroundColor: "#e53e3e",
-              color: "white",
-              padding: "0.25rem 0.5rem",
-              borderRadius: "12px",
-              fontSize: "0.75rem",
-              fontWeight: "600",
-              zIndex: "10",
-            }}
+    <div className="bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden group border border-gray-100">
+      <div className="relative">
+        <img
+          src={product.image}
+          alt={product.name}
+          className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-700"
+        />
+        <div className="absolute top-3 right-3 flex flex-col space-y-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <button className="p-2 bg-white/90 rounded-full hover:bg-white hover:text-red-500 transition-colors">
+            <Heart className="h-4 w-4" />
+          </button>
+          <button 
+            onClick={() => onViewDetails(product)}
+            className="p-2 bg-white/90 rounded-full hover:bg-white hover:text-primary-500 transition-colors"
           >
-            OFERTA
+            <Eye className="h-4 w-4" />
+          </button>
+        </div>
+        <div className="absolute top-3 left-3">
+          <span className={`px-2 py-1 rounded-full text-xs font-medium ${categoryColor}`}>
+            {product.subcategory}
+          </span>
+        </div>
+        {product.brand && (
+          <div className="absolute bottom-3 left-3">
+            <span className="px-2 py-1 bg-black/70 text-white rounded text-xs font-medium">
+              {product.brand}
+            </span>
           </div>
         )}
-        <img
-          src={image}
-          alt={name}
-          style={{
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            transition: "transform 0.3s ease",
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = "scale(1.05)";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = "scale(1)";
-          }}
-        />
-
-        {/* Quick View Overlay */}
-        <div
-          style={{
-            position: "absolute",
-            top: "0",
-            left: "0",
-            right: "0",
-            bottom: "0",
-            background: "rgba(0, 0, 0, 0.7)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            opacity: "0",
-            transition: "opacity 0.3s ease",
-            color: "white",
-            fontSize: "0.9rem",
-            fontWeight: "600",
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.opacity = "1";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.opacity = "0";
-          }}
-        >
-          Ver Detalles
-        </div>
+        {!product.inStock && (
+          <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+            <span className="bg-red-500 text-white px-4 py-2 rounded-full text-sm font-medium">
+              Agotado
+            </span>
+          </div>
+        )}
       </div>
 
-      {/* Product Info */}
-      <div style={{ flex: "1", display: "flex", flexDirection: "column" }}>
-        <h3
-          style={{
-            fontSize: "1.1rem",
-            fontWeight: "600",
-            marginBottom: "0.5rem",
-            color: "#1e293b",
-            lineHeight: "1.4",
-          }}
-        >
-          {name}
-        </h3>
+      <div className="p-4 sm:p-6">
+        <div className="mb-3">
+          <h3 className="font-bold text-gray-900 text-base sm:text-lg leading-tight group-hover:text-blue-600 transition-colors line-clamp-2 min-h-[2.5rem] flex items-start">
+            {product.name}
+          </h3>
+        </div>
+        
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center space-x-1">
+            {renderStars(product.rating)}
+            <span className="text-sm text-gray-500 ml-1">({product.reviews})</span>
+          </div>
+          <div className="flex items-center text-xs text-gray-500">
+            <Package className="h-4 w-4 mr-1" />
+            {product.inStock ? 'En stock' : 'Agotado'}
+          </div>
+        </div>
 
-        <p
-          style={{
-            fontSize: "0.9rem",
-            marginBottom: "1rem",
-            color: "#64748b",
-            lineHeight: "1.5",
-            flex: "1",
-            display: "-webkit-box",
-            WebkitLineClamp: 3,
-            WebkitBoxOrient: "vertical",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-          }}
-        >
-          {description.length > 120 ? `${description.substring(0, 120)}...` : description}
+        <p className="text-gray-700 text-sm mb-4 line-clamp-2 min-h-[2.5rem] leading-tight">
+          {product.description}
         </p>
 
-        {/* Price and Action */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginTop: "auto",
-          }}
-        >
-          <div>
-            {isOffer && originalPrice && (
-              <div
-                style={{
-                  fontSize: "0.9rem",
-                  color: "#999",
-                  textDecoration: "line-through",
-                  marginBottom: "0.25rem",
-                }}
-              >
-                {originalPrice}
-              </div>
-            )}
-            <div
-              style={{
-                fontWeight: "700",
-                fontSize: "1.25rem",
-                color: isOffer ? "#e53e3e" : "#667eea",
-              }}
-            >
-              {price}
-            </div>
-          </div>
+        <div className="mb-4">
+          <span className="text-2xl sm:text-3xl font-bold text-gray-900">
+            ${product.price.toFixed(2)}
+          </span>
+        </div>
 
+        <div className="flex flex-col sm:flex-row gap-2">
           <button
-            style={{
-              backgroundColor: "#667eea",
-              color: "white",
-              border: "none",
-              borderRadius: "8px",
-              padding: "0.5rem 1rem",
-              fontSize: "0.9rem",
-              fontWeight: "600",
-              cursor: "pointer",
-              transition: "all 0.3s ease",
-            }}
-            onClick={(e) => {
-              e.stopPropagation();
-              onAddToCart && onAddToCart();
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = "#5a67d8";
-              e.currentTarget.style.transform = "scale(1.05)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "#667eea";
-              e.currentTarget.style.transform = "scale(1)";
-            }}
+            onClick={() => onViewDetails(product)}
+            className="flex-1 py-2.5 px-3 rounded-lg font-medium transition-all duration-200 flex items-center justify-center gap-1.5 border-2 border-gray-300 text-gray-800 hover:border-blue-500 hover:text-blue-600 hover:bg-blue-50"
           >
-            Agregar
+            <Eye className="h-4 w-4 flex-shrink-0" />
+            <span className="text-sm font-medium truncate">Ver Detalles</span>
+          </button>
+          <button
+            onClick={() => onAddToCart(product)}
+            disabled={!product.inStock}
+            className={`flex-1 py-2.5 px-3 rounded-lg font-medium transition-all duration-200 flex items-center justify-center gap-1.5 ${
+              product.inStock
+                ? product.category === 'computer'
+                  ? 'bg-blue-600 hover:bg-blue-700 text-white hover:shadow-lg'
+                  : 'bg-green-600 hover:bg-green-700 text-white hover:shadow-lg'
+                : 'bg-gray-300 text-gray-600 cursor-not-allowed'
+            }`}
+          >
+            <ShoppingCart className="h-4 w-4 flex-shrink-0" />
+            <span className="text-sm font-medium truncate">
+              {product.inStock ? 'Comprar' : 'Agotado'}
+            </span>
           </button>
         </div>
       </div>
     </div>
   );
-};
-
-export default ProductCard;
+}
