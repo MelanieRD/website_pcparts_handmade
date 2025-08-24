@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { ShoppingCart, Menu, X, Search, Heart, User, Settings, Minus, Plus, Trash2 } from 'lucide-react';
+import { useState } from 'react';
+import { ShoppingCart, Menu, X, Search, Heart, User, Minus, Plus, Trash2 } from 'lucide-react';
 import { CartItem } from '../types/Product';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -18,20 +18,16 @@ interface HeaderProps {
 
 function Header({ 
   cartItems, 
-  onCategoryChange, 
-  activeCategory, 
   onSearchChange,
   searchQuery,
   onOpenAuth,
-  onOpenAdmin,
   onUpdateCartQuantity,
   onRemoveFromCart,
   onClearCart
 }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-  const { user, isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, logout } = useAuth();
 
   const cartItemCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
   const cartTotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
@@ -92,6 +88,7 @@ function Header({
               </button>
               
               {/* User Menu */}
+              {/*
               <div className="relative">
                 <button
                   onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
@@ -147,6 +144,8 @@ function Header({
                   </div>
                 )}
               </div>
+
+              */}
             </div>
 
             {/* Mobile Menu Button */}
@@ -245,10 +244,10 @@ function Header({
                         
                         {/* Quantity Controls */}
                         <div className="flex items-center justify-between mb-2">
-                          <div className="flex items-center space-x-2 bg-white rounded-lg border border-gray-300 p-1">
+                          <div className="flex items-center space-x-1 bg-white rounded-lg border border-gray-300 p-1">
                             <button
                               onClick={() => onUpdateCartQuantity(item.id, item.quantity - 1)}
-                              className="w-8 h-8 flex items-center justify-center rounded hover:bg-gray-100 text-gray-600 hover:text-gray-800 transition-colors"
+                              className="w-8 h-8 flex items-center justify-center rounded bg-gray-200 hover:bg-gray-300 text-gray-700 hover:text-gray-900 transition-colors border border-gray-300 hover:border-gray-400"
                             >
                               <Minus className="h-4 w-4" />
                             </button>
@@ -259,12 +258,12 @@ function Header({
                                 const newQuantity = parseInt(e.target.value) || 0;
                                 onUpdateCartQuantity(item.id, newQuantity);
                               }}
-                              className="w-12 text-center text-sm font-medium bg-transparent border-none focus:outline-none"
+                              className="w-12 text-center text-sm font-medium bg-transparent border-none focus:outline-none text-gray-900"
                               min="1"
                             />
                             <button
                               onClick={() => onUpdateCartQuantity(item.id, item.quantity + 1)}
-                              className="w-8 h-8 flex items-center justify-center rounded hover:bg-gray-100 text-gray-600 hover:text-gray-800 transition-colors"
+                              className="w-8 h-8 flex items-center justify-center rounded bg-gray-200 hover:bg-gray-300 text-gray-700 hover:text-gray-900 transition-colors border border-gray-300 hover:border-gray-400"
                             >
                               <Plus className="h-4 w-4" />
                             </button>
