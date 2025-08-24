@@ -44,10 +44,6 @@ export default function HeroSection() {
           
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2">
-              <Zap className="h-5 w-5 text-yellow-400" />
-              <span className="text-sm font-medium">Envío Gratis</span>
-            </div>
-            <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2">
               <Cpu className="h-5 w-5 text-blue-400" />
               <span className="text-sm font-medium">Alta Performance</span>
             </div>

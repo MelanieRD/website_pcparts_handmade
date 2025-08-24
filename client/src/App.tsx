@@ -62,6 +62,29 @@ function App() {
     });
   };
 
+  const handleUpdateCartQuantity = (productId: string, newQuantity: number) => {
+    if (newQuantity <= 0) {
+      handleRemoveFromCart(productId);
+      return;
+    }
+    
+    setCartItems(prevItems =>
+      prevItems.map(item =>
+        item.id === productId
+          ? { ...item, quantity: newQuantity }
+          : item
+      )
+    );
+  };
+
+  const handleRemoveFromCart = (productId: string) => {
+    setCartItems(prevItems => prevItems.filter(item => item.id !== productId));
+  };
+
+  const handleClearCart = () => {
+    setCartItems([]);
+  };
+
   const handleViewDetails = (product: Product) => {
     setSelectedProduct(product);
     setIsProductDetailOpen(true);
@@ -87,6 +110,9 @@ function App() {
           searchQuery={searchQuery}
           onOpenAuth={() => setIsAuthModalOpen(true)}
           onOpenAdmin={() => setIsAdminPanelOpen(true)}
+          onUpdateCartQuantity={handleUpdateCartQuantity}
+          onRemoveFromCart={handleRemoveFromCart}
+          onClearCart={handleClearCart}
         />
         
         <HeroSection />

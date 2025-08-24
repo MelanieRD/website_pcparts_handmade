@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShoppingCart, Menu, X, Search, Heart, User, Settings } from 'lucide-react';
+import { ShoppingCart, Menu, X, Search, Heart, User, Settings, Minus, Plus, Trash2 } from 'lucide-react';
 import { CartItem } from '../types/Product';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -11,6 +11,9 @@ interface HeaderProps {
   searchQuery: string;
   onOpenAuth: () => void;
   onOpenAdmin: () => void;
+  onUpdateCartQuantity: (productId: string, newQuantity: number) => void;
+  onRemoveFromCart: (productId: string) => void;
+  onClearCart: () => void;
 }
 
 function Header({ 
@@ -20,7 +23,10 @@ function Header({
   onSearchChange,
   searchQuery,
   onOpenAuth,
-  onOpenAdmin
+  onOpenAdmin,
+  onUpdateCartQuantity,
+  onRemoveFromCart,
+  onClearCart
 }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -228,24 +234,77 @@ function Header({
               ) : (
                 <div className="space-y-4">
                   {cartItems.map((item) => (
-                    <div key={item.id} className="flex items-center space-x-4 p-4 border border-gray-200 rounded-lg bg-gray-50">
+                    <div key={item.id} className="flex items-start space-x-3 p-4 border border-gray-200 rounded-lg bg-gray-50">
                       <img
                         src={item.image}
                         alt={item.name}
-                        className="w-16 h-16 object-cover rounded"
+                        className="w-16 h-16 object-cover rounded flex-shrink-0"
                       />
-                      <div className="flex-1">
-                        <h3 className="font-medium text-sm text-gray-900">{item.name}</h3>
-                        <p className="text-gray-800 text-sm">Cantidad: {item.quantity}</p>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-medium text-sm text-gray-900 line-clamp-2 mb-2">{item.name}</h3>
+                        
+                        {/* Quantity Controls */}
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center space-x-2 bg-white rounded-lg border border-gray-300 p-1">
+                            <button
+                              onClick={() => onUpdateCartQuantity(item.id, item.quantity - 1)}
+                              className="w-8 h-8 flex items-center justify-center rounded hover:bg-gray-100 text-gray-600 hover:text-gray-800 transition-colors"
+                            >
+                              <Minus className="h-4 w-4" />
+                            </button>
+                            <input
+                              type="number"
+                              value={item.quantity}
+                              onChange={(e) => {
+                                const newQuantity = parseInt(e.target.value) || 0;
+                                onUpdateCartQuantity(item.id, newQuantity);
+                              }}
+                              className="w-12 text-center text-sm font-medium bg-transparent border-none focus:outline-none"
+                              min="1"
+                            />
+                            <button
+                              onClick={() => onUpdateCartQuantity(item.id, item.quantity + 1)}
+                              className="w-8 h-8 flex items-center justify-center rounded hover:bg-gray-100 text-gray-600 hover:text-gray-800 transition-colors"
+                            >
+                              <Plus className="h-4 w-4" />
+                            </button>
+                          </div>
+                          
+                          {/* Remove Button */}
+                          <button
+                            onClick={() => onRemoveFromCart(item.id)}
+                            className="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
+                            title="Eliminar producto"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        </div>
+                        
                         <p className="font-semibold text-blue-700">${(item.price * item.quantity).toFixed(2)}</p>
                       </div>
                     </div>
                   ))}
-                  <div className="border-t pt-4">
-                    <div className="flex justify-between items-center mb-4">
+                  <div className="border-t pt-4 space-y-4">
+                    <div className="flex justify-between items-center">
                       <span className="font-semibold text-gray-900">Total:</span>
                       <span className="font-bold text-xl text-blue-700">${cartTotal.toFixed(2)}</span>
                     </div>
+                    
+                    {/* Clear Cart Button */}
+                    {cartItems.length > 0 && (
+                      <button
+                        onClick={() => {
+                          if (window.confirm('¿Estás seguro de que quieres vaciar el carrito?')) {
+                            onClearCart();
+                          }
+                        }}
+                        className="w-full bg-gray-500 text-white py-2 rounded-lg hover:bg-gray-600 transition-colors font-medium text-sm"
+                      >
+                        Vaciar Carrito
+                      </button>
+                    )}
+                    
+                    {/* WhatsApp Checkout Button */}
                     <button 
                       onClick={() => {
                         // Prepare WhatsApp message

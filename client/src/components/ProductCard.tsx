@@ -1,4 +1,3 @@
-import React from 'react';
 import { Star, ShoppingCart, Heart, Package, Eye } from 'lucide-react';
 import { Product } from '../types/Product';
 
@@ -13,9 +12,9 @@ export default function ProductCard({ product, onAddToCart, onViewDetails }: Pro
     return Array.from({ length: 5 }).map((_, i) => (
       <Star
         key={i}
-        className={`h-4 w-4 ${
+        className={`h-3 w-3 ${
           i < Math.floor(rating) 
-            ? 'text-accent-400 fill-current' 
+            ? 'text-yellow-400 fill-current' 
             : 'text-gray-300'
         }`}
       />
@@ -32,7 +31,7 @@ export default function ProductCard({ product, onAddToCart, onViewDetails }: Pro
         <img
           src={product.image}
           alt={product.name}
-          className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-700"
+          className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-700"
         />
         <div className="absolute top-3 right-3 flex flex-col space-y-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           <button className="p-2 bg-white/90 rounded-full hover:bg-white hover:text-red-500 transition-colors">
@@ -66,46 +65,46 @@ export default function ProductCard({ product, onAddToCart, onViewDetails }: Pro
         )}
       </div>
 
-      <div className="p-4 sm:p-6">
-        <div className="mb-3">
-          <h3 className="font-bold text-gray-900 text-base sm:text-lg leading-tight group-hover:text-blue-600 transition-colors line-clamp-2 min-h-[2.5rem] flex items-start">
+      <div className="p-3 sm:p-4">
+        <div className="mb-2">
+          <h3 className="font-bold text-gray-900 text-sm sm:text-base leading-tight group-hover:text-blue-600 transition-colors line-clamp-2 min-h-[2rem]">
             {product.name}
           </h3>
         </div>
         
-        <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center justify-between mb-2">
           <div className="flex items-center space-x-1">
             {renderStars(product.rating)}
-            <span className="text-sm text-gray-500 ml-1">({product.reviews})</span>
+            <span className="text-xs text-gray-500 ml-1">({product.reviews})</span>
           </div>
           <div className="flex items-center text-xs text-gray-500">
-            <Package className="h-4 w-4 mr-1" />
-            {product.inStock ? 'En stock' : 'Agotado'}
+            <Package className="h-3 w-3 mr-1" />
+            {product.inStock ? 'Stock' : 'Agotado'}
           </div>
         </div>
 
-        <p className="text-gray-700 text-sm mb-4 line-clamp-2 min-h-[2.5rem] leading-tight">
+        <p className="text-gray-600 text-xs mb-3 line-clamp-1 leading-tight">
           {product.description}
         </p>
 
-        <div className="mb-4">
-          <span className="text-2xl sm:text-3xl font-bold text-gray-900">
+        <div className="mb-3">
+          <span className="text-xl sm:text-2xl font-bold text-gray-900">
             ${product.price.toFixed(2)}
           </span>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-2">
+        <div className="flex gap-2">
           <button
             onClick={() => onViewDetails(product)}
-            className="flex-1 py-2.5 px-3 rounded-lg font-medium transition-all duration-200 flex items-center justify-center gap-1.5 border-2 border-gray-300 text-gray-800 hover:border-blue-500 hover:text-blue-600 hover:bg-blue-50"
+            className="flex-1 py-2 px-2 rounded-lg font-medium transition-all duration-200 flex items-center justify-center gap-1 border-2 border-gray-300 text-gray-800 hover:border-blue-500 hover:text-blue-600 hover:bg-blue-50"
           >
-            <Eye className="h-4 w-4 flex-shrink-0" />
-            <span className="text-sm font-medium truncate">Ver Detalles</span>
+            <Eye className="h-3 w-3 flex-shrink-0" />
+            <span className="text-xs font-medium truncate">Ver</span>
           </button>
           <button
             onClick={() => onAddToCart(product)}
             disabled={!product.inStock}
-            className={`flex-1 py-2.5 px-3 rounded-lg font-medium transition-all duration-200 flex items-center justify-center gap-1.5 ${
+            className={`flex-1 py-2 px-2 rounded-lg font-medium transition-all duration-200 flex items-center justify-center gap-1 ${
               product.inStock
                 ? product.category === 'computer'
                   ? 'bg-blue-600 hover:bg-blue-700 text-white hover:shadow-lg'
@@ -113,8 +112,8 @@ export default function ProductCard({ product, onAddToCart, onViewDetails }: Pro
                 : 'bg-gray-300 text-gray-600 cursor-not-allowed'
             }`}
           >
-            <ShoppingCart className="h-4 w-4 flex-shrink-0" />
-            <span className="text-sm font-medium truncate">
+            <ShoppingCart className="h-3 w-3 flex-shrink-0" />
+            <span className="text-xs font-medium truncate">
               {product.inStock ? 'Comprar' : 'Agotado'}
             </span>
           </button>
