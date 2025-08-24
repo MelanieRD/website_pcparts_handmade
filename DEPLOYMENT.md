@@ -29,10 +29,10 @@ git push origin main
 ## 🔧 Configuraciones Importantes
 
 ### Cambiar nombre del repositorio
-Si tu repositorio no se llama "CyborgTech", edita:
+El repositorio está configurado para "website_pcparts_handmade". Si cambias el nombre, edita:
 ```typescript
 // client/vite.config.ts línea 8
-base: process.env.NODE_ENV === 'production' ? '/TU-REPO-NOMBRE/' : '/',
+base: process.env.NODE_ENV === 'production' ? '/website_pcparts_handmade/' : '/',
 ```
 
 ### Configurar WhatsApp
@@ -46,7 +46,7 @@ const whatsappNumber = '1234567890'; // Cambia por tu número real
 
 ### Método 1: Automático (Recomendado)
 - Push a `main`/`master` → Deploy automático
-- URL: `https://TU-USUARIO.github.io/CyborgTech/`
+- URL: `https://MelanieRD.github.io/website_pcparts_handmade/`
 
 ### Método 2: Manual con script
 ```bash

@@ -4,8 +4,8 @@ import react from '@vitejs/plugin-react';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  // GitHub Pages base path - change 'CyborgTech' to your repository name
-  base: process.env.NODE_ENV === 'production' ? '/CyborgTech/' : '/',
+  // GitHub Pages base path - change 'website_pcparts_handmade' to your repository name
+  base: process.env.NODE_ENV === 'production' ? '/website_pcparts_handmade/' : '/',
   server: {
     port: 5173,
     host: 'localhost',
