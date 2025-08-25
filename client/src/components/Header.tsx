@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ShoppingCart, Menu, X, Search, Heart, User, Minus, Plus, Trash2 } from 'lucide-react';
+import { ShoppingCart, Menu, X, Search, Heart, User, Minus, Plus, Trash2, Settings } from 'lucide-react';
 import { CartItem } from '../types/Product';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -21,13 +21,15 @@ function Header({
   onSearchChange,
   searchQuery,
   onOpenAuth,
+  onOpenAdmin,
   onUpdateCartQuantity,
   onRemoveFromCart,
   onClearCart
 }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const { isAuthenticated, logout } = useAuth();
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const { isAuthenticated, logout, user } = useAuth();
 
   const cartItemCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
   const cartTotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
@@ -88,7 +90,7 @@ function Header({
               </button>
               
               {/* User Menu */}
-              {/*
+              
               <div className="relative">
                 <button
                   onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
@@ -145,7 +147,7 @@ function Header({
                 )}
               </div>
 
-              */}
+              
             </div>
 
             {/* Mobile Menu Button */}

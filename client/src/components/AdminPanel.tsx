@@ -4,6 +4,7 @@ import { Product } from '../types/Product';
 import { Sale } from '../types/Sale';
 import ProductForm from './ProductForm';
 import SalesTable from './SalesTable';
+import { addProduct, updateProduct, deleteProduct } from '../firebase/products';
 
 interface AdminPanelProps {
   isOpen: boolean;
@@ -58,31 +59,33 @@ export default function AdminPanel({ isOpen, onClose, products, onUpdateProducts
     setIsProductFormOpen(true);
   };
 
-  const handleDeleteProduct = (productId: string) => {
+  const handleDeleteProduct = async (productId: string) => {
     if (confirm('¿Estás seguro de que quieres eliminar este producto?')) {
-      const updatedProducts = products.filter(p => p.id !== productId);
-      onUpdateProducts(updatedProducts);
+      try {
+        await deleteProduct(productId);
+        // No need to update local state - Firebase subscription will handle it
+      } catch (error) {
+        console.error('Error deleting product:', error);
+        alert('Error al eliminar el producto. Inténtalo de nuevo.');
+      }
     }
   };
 
-  const handleSaveProduct = (productData: Omit<Product, 'id'>) => {
-    if (selectedProduct) {
-      // Edit existing product
-      const updatedProducts = products.map(p =>
-        p.id === selectedProduct.id
-          ? { ...productData, id: selectedProduct.id }
-          : p
-      );
-      onUpdateProducts(updatedProducts);
-    } else {
-      // Add new product
-      const newProduct: Product = {
-        ...productData,
-        id: Date.now().toString()
-      };
-      onUpdateProducts([...products, newProduct]);
+  const handleSaveProduct = async (productData: Omit<Product, 'id'>) => {
+    try {
+      if (selectedProduct) {
+        // Edit existing product
+        await updateProduct(selectedProduct.id, productData);
+      } else {
+        // Add new product
+        await addProduct(productData);
+      }
+      setIsProductFormOpen(false);
+      // No need to update local state - Firebase subscription will handle it
+    } catch (error) {
+      console.error('Error saving product:', error);
+      alert('Error al guardar el producto. Inténtalo de nuevo.');
     }
-    setIsProductFormOpen(false);
   };
 
   const totalRevenue = sales.reduce((sum, sale) => sum + sale.total, 0);
@@ -382,11 +385,7 @@ export default function AdminPanel({ isOpen, onClose, products, onUpdateProducts
                         transformOrigin: 'top left'
                       }}
                     />
-                    <style jsx>{`
-                      iframe {
-                        border: none !important;
-                      }
-                    `}</style>
+
                   </div>
                   
                   {/* Dashboard Info Footer */}

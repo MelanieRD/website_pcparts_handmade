@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { SlidersHorizontal } from 'lucide-react';
 import Header from './components/Header';
 import HeroSection from './components/HeroSection';
@@ -8,9 +8,11 @@ import ProductDetail from './components/ProductDetail';
 import AuthModal from './components/AuthModal';
 import AdminPanel from './components/AdminPanel';
 import Footer from './components/Footer';
-import { products, updateProducts } from './data/products';
+import { products } from './data/products';
 import { Product, CartItem } from './types/Product';
 import { AuthProvider } from './contexts/AuthContext';
+import { getProducts, subscribeToProducts } from './firebase/products';
+import './utils/firebaseSetup';
 
 function App() {
   const [activeCategory, setActiveCategory] = useState<'all' | 'computer' | 'handmade'>('all');
@@ -21,8 +23,42 @@ function App() {
   const [isProductDetailOpen, setIsProductDetailOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isAdminPanelOpen, setIsAdminPanelOpen] = useState(false);
-  const [currentProducts, setCurrentProducts] = useState<Product[]>(products);
+  const [currentProducts, setCurrentProducts] = useState<Product[]>([]);
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+  const [isLoadingProducts, setIsLoadingProducts] = useState(true);
+
+  // Load products from Firebase on component mount
+  useEffect(() => {
+    const loadProducts = async () => {
+      try {
+        setIsLoadingProducts(true);
+        const firebaseProducts = await getProducts();
+        
+        // If no products in Firebase, use local products as fallback
+        if (firebaseProducts.length === 0) {
+          setCurrentProducts(products);
+        } else {
+          setCurrentProducts(firebaseProducts);
+        }
+      } catch (error) {
+        console.error('Error loading products from Firebase:', error);
+        // Fallback to local products on error
+        setCurrentProducts(products);
+      } finally {
+        setIsLoadingProducts(false);
+      }
+    };
+
+    loadProducts();
+
+    // Subscribe to real-time updates
+    const unsubscribe = subscribeToProducts((firebaseProducts) => {
+      setCurrentProducts(firebaseProducts);
+      setIsLoadingProducts(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   // Filter products based on category and search query
   const filteredProducts = useMemo(() => {
@@ -97,7 +133,7 @@ function App() {
 
   const handleUpdateProducts = (newProducts: Product[]) => {
     setCurrentProducts(newProducts);
-    updateProducts(newProducts);
+    // Firebase products are updated through the real-time listener
   };
   return (
     <AuthProvider>
@@ -172,11 +208,20 @@ function App() {
                 </div>
               </div>
 
-              <ProductGrid
-                products={filteredProducts}
-                onAddToCart={handleAddToCart}
-                onViewDetails={handleViewDetails}
-              />
+              {isLoadingProducts ? (
+                <div className="flex justify-center items-center h-64">
+                  <div className="text-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
+                    <p className="text-gray-600">Cargando productos...</p>
+                  </div>
+                </div>
+              ) : (
+                <ProductGrid
+                  products={filteredProducts}
+                  onAddToCart={handleAddToCart}
+                  onViewDetails={handleViewDetails}
+                />
+              )}
             </section>
           </div>
         </main>

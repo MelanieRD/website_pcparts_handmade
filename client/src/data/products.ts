@@ -5,31 +5,58 @@ export const products: Product[] = [
   // Computer Parts
   {
     id: '1',
-    name: 'NVIDIA GeForce RTX 4080',
-    price: 2000.99,
-    image: getPlaceholderImage('computer', 'Tarjetas Gráficas'),
+    name: 'HEXA XL CG82',
+    price: 6500,
+    image: '/images/products/cg82-1.webp',
     images: [
-      getPlaceholderImage('computer', 'Tarjetas Gráficas'),
-      getPlaceholderImage('computer', 'Tarjetas Gráficas'),
-      getPlaceholderImage('computer', 'Tarjetas Gráficas')
+      '/images/products/cg82-1.webp',
+      '/images/products/cg82-2.webp',
+      '/images/products/cg82-3.webp'
     ],
     category: 'computer',
-    subcategory: 'Tarjetas Gráficas',
-    description: 'High-performance graphics card for gaming and creative work',
-    fullDescription: 'La NVIDIA GeForce RTX 4080 es una tarjeta gráfica de alto rendimiento diseñada para gaming 4K y trabajo creativo profesional. Con arquitectura Ada Lovelace y 16GB de memoria GDDR6X, ofrece ray tracing en tiempo real y DLSS 3 para el máximo rendimiento.',
+    subcategory: 'Gabinetes',
+    description: 'Gabinete ATX',
+    fullDescription: 'Gabinete de torre media que combina diseño moderno, excelente capacidad de refrigeración y compatibilidad con componentes de alto rendimiento, ideal para gamers que buscan funcionalidad y estilo.',
     specifications: {
-      'Memoria': '16GB GDDR6X',
-      'Interfaz de memoria': '256-bit',
-      'Velocidad base': '2205 MHz',
-      'Velocidad boost': '2505 MHz',
-      'Conectores': '3x DisplayPort 1.4a, 1x HDMI 2.1',
-      'Consumo': '320W'
+      'Compatibilidad': 'EATX, ATX, Micro-ATX y Mini-ITX',
+      'Dimensión': 'dimensiones de 480mm x 470mm x 205mm, admite tarjetas gráficas de hasta 400 mm de longitud y coolers de CPU de hasta 165 mm de altura',
+      'Ventilación': 'Incluye 4 Abanicos con hub RGB, capacidad para instalar hasta 12 ventiladores de 120 mm, incluyendo soporte para radiadores de 240/280/360 mm en el frontal y superior, y de 120 mm en la parte trasera.'
+      , 'Conectividad': 'Panel frontal equipado con puertos USB 3.0, USB 2.0, Type-C, y conectores de audio y micrófono de 3.5 mm. '
+    , 'Diseño': 'Panel lateral de vidrio templado con bisagra magnética para un acceso fácil al interior, y cubierta para la fuente de alimentación'
     },
     inStock: true,
-    rating: 4.8,
-    reviews: 324,
-    brand: 'NVIDIA',
-    model: 'RTX 4080'
+    rating: 5,
+    reviews: 0,
+    brand: 'FANTECH',
+    model: 'CG82'
+  },
+  {
+    id: '2',
+    name: 'AERO XL CG81',
+    price: 6500,
+    image: '/images/products/cg81-1.webp',
+    images: [
+      '/images/products/cg81-1.webp',
+      '/images/products/cg81-2.webp',
+      '/images/products/cg81-3.webp',
+      '/images/products/cg81-4.webp'
+    ],
+    category: 'computer',
+    subcategory: 'Gabinetes',
+    description: 'Gabinete ATX',
+    fullDescription: 'Gabinete de torre media que combina diseño moderno, excelente capacidad de refrigeración y compatibilidad con componentes de alto rendimiento, ideal para gamers que buscan funcionalidad y estilo.',
+    specifications: {
+      'Compatibilidad': 'EATX, ATX, Micro-ATX y Mini-ITX',
+      'Dimensión': 'dimensiones de 480mm x 470mm x 205mm, admite tarjetas gráficas de hasta 400 mm de longitud y coolers de CPU de hasta 165 mm de altura',
+      'Ventilación': 'Incluye 4 Abanicos con hub RGB, capacidad para instalar hasta 12 ventiladores de 120 mm, incluyendo soporte para radiadores de 240/280/360 mm en el frontal y superior, y de 120 mm en la parte trasera.'
+      , 'Conectividad': 'Panel frontal equipado con puertos USB 3.0, USB 2.0, Type-C, y conectores de audio y micrófono de 3.5 mm. '
+    , 'Diseño': 'Panel lateral de vidrio templado con bisagra magnética para un acceso fácil al interior, y cubierta para la fuente de alimentación'
+    },
+    inStock: true,
+    rating: 5,
+    reviews: 0,
+    brand: 'FANTECH',
+    model: 'CG81'
   },
   {
     id: '2',

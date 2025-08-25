@@ -28,11 +28,13 @@ export default function ProductCard({ product, onAddToCart, onViewDetails }: Pro
   return (
     <div className="bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden group border border-gray-100">
       <div className="relative">
-        <img
-          src={product.image}
-          alt={product.name}
-          className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-700"
-        />
+        <div className="w-full h-48 bg-gray-50 flex items-center justify-center overflow-hidden">
+          <img
+            src={product.image}
+            alt={product.name}
+            className="max-w-full max-h-full object-contain group-hover:scale-110 transition-transform duration-700"
+          />
+        </div>
         <div className="absolute top-3 right-3 flex flex-col space-y-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           <button className="p-2 bg-white/90 rounded-full hover:bg-white hover:text-red-500 transition-colors">
             <Heart className="h-4 w-4" />
